@@ -1,0 +1,11 @@
+nanosim_training/
+nanosim/
+logs/
+refs/
+.snakemake/
+seqtk/
+fractions/
+test/
+art/
+InSilicoSeq/
+concat.py

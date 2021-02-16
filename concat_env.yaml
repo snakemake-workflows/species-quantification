@@ -1,0 +1,5 @@
+name: pscript
+channels:
+   - conda-forge
+dependencies:
+   - biopython

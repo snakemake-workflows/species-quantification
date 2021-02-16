@@ -1,0 +1,38 @@
+#Set the number of samples to be generated
+number_of_samples: 1
+
+#Reference genomes 
+bac_ref: ["GCF_006151785.1_ASM615178v1", "GCF_000622225.1_ASM62222v1"]
+
+#number of reads to be fractionated
+p: [1000, 10000]
+
+#parameters for short read simulation (fold_coverage required for art settings)
+short_read_len: 150
+fold_coverage: 10 
+
+#parameters for long read simulation
+min_long_read_len: 300
+max_long_read_len: 1000
+
+#long read simulation additional files
+nanosim: /home/uzuner/Documents/Software/NanoSim/src #nanosim installation dir
+hum_pro: /home/uzuner/Documents/ReadSimulation/Snakemake/nanosim_training/human_NA12878_DNA_FAB49712_albacore #ready to use error profile 
+ecoli_read: /home/uzuner/Documents/ReadSimulation/Snakemake/nanosim_training #e_coli read file, for more info, check: info.txt
+
+
+
+
+# #nanosim
+# #human read simulation
+# human_model: pwd/home/uzuner/Documents/ReadSimulation/Snakemake/nanosim_training/human_NA12878_DNA_FAB49712_albacore
+
+# #bacterial genome simulation
+# #for the bacterial long read simulation, one should modify the associated files according to the sample number
+# bac_list: /home/uzuner/Documents/ReadSimulation/Snakemake/nanosim_training
+#bac_model: /home/uzuner/Documents/ReadSimulation/Snakemake/nanosim_training/bac_model
+
+
+# #bacterial genomes; ASM615178v1: Paracoccus marcusii
+# bac: ["ASM615178v1", "ASM210555v1"]
+

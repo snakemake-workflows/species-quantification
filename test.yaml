@@ -1,0 +1,5 @@
+name: insilicoseq
+channels:
+   - conda-forge
+dependencies:
+   - insilicoseq

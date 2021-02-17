@@ -7,11 +7,11 @@ bac_ref: ["GCF_006151785.1_ASM615178v1", "GCF_000622225.1_ASM62222v1"]
 #number of reads to be fractionated
 p: [1000, 10000]
 
-#parameters for short read simulation (fold_coverage required for art settings)
+#parameters for short read simulation (fold_coverage required for art settings) #default: aroudn 800000 reads
 short_read_len: 150
 fold_coverage: 10 
 
-#parameters for long read simulation
+#parameters for long read simulation (around 20000 reads)
 min_long_read_len: 300
 max_long_read_len: 1000
 

@@ -66,7 +66,7 @@ rule genomepy:
  #human sequence simulation 
 rule art_sim_hs:
     input:
-        "refs/hs_genome.fasta"
+        "refs/chrY.fasta"
     output:
         multiext("art/hum/Sample{art_hum}", "1.fq", "2.fq")
     log:
@@ -76,7 +76,7 @@ rule art_sim_hs:
         length = config['short_read_len'],
         f_cov = config['fold_coverage']
     shell:
-        "art_illumina -ss HS25 -i refs/hs_genome.fasta -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o" 
+        "art_illumina -ss HS25 -i refs/chrY.fasta -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o" 
         " art/hum/Sample{wildcards.art_hum} --noALN"
         # "&& cat art/hum/Sample{wildcards.sample}.temp | gzip > art/hum/Sample{wildcards.sample} "
         # "&& rm art/hum/Sample{wildcards.sample}.temp "
@@ -89,7 +89,7 @@ rule art_sim_bac:
         multiext("art/bac/{bac_ref}", "1.fq", "2.fq")
     log:
         "art/logs/{bac_ref}.log"
-    threads: 4
+    threads: 2
     params:
         length = config['short_read_len'],
         f_cov = config['fold_coverage']
@@ -98,7 +98,7 @@ rule art_sim_bac:
 
 rule nanosim_hs:
     input:
-        ref = "refs/hs_genome.fasta",
+        ref = "refs/chrY.fasta",
         model = config['hum_pro'] 
     output:
         "nanosim/hum/{n}_aligned_error_profile",
@@ -106,16 +106,16 @@ rule nanosim_hs:
         "nanosim/hum/{n}_unaligned_reads.fastq"      
     log:
         "logs/nanosim/{n}.log"
-    threads: 6
+    threads: 4
     conda:
         "nanosim_env.yaml"
     params:
         nanosim = config['nanosim'],
-        min_reads = config['min_long_read_len'],
+        min_reads = config['min_long_read_len'], #usage of these causes a bug
         max_reads = config['max_long_read_len']
     shell:
         "python {params.nanosim}/simulator.py genome -rg {input.ref} -c {input.model}/training -b albacore --num_threads {threads}"
-        " --fastq -o nanosim/hum/{wildcards.n} -min {params.min_reads} -max {params.max_reads}"
+        " --fastq -o nanosim/hum/{wildcards.n} "
 
 #bacterial sequence simulation
 
@@ -184,14 +184,14 @@ rule nanosim_bac_train:
         "nanosim_training/bac_model/{bac_ref}/{bac_ref}_aligned_reads.pkl"
     log:
         "logs/nanosim/{bac_ref}_train.log"
-    threads: 6
+    threads: 4
     conda:
         "nanosim_env.yaml"
     params:
         nanosim = config['nanosim']
     shell:
         "python {params.nanosim}/read_analysis.py genome -i {input.read} -rg {input.r} --num_threads {threads}"
-        " -o nanosim_training/bac_model/{wildcards.bac_ref}/{wildcards.bac_ref} -min {params.min_reads} -max {params.max_reads}"
+        " -o nanosim_training/bac_model/{wildcards.bac_ref}/{wildcards.bac_ref}"
 
 
 #question: dna_type circular or linear????
@@ -215,13 +215,14 @@ rule nanosim_bac_sim:
         min_reads = config['min_long_read_len'],
         max_reads = config['max_long_read_len']
     shell:
-        "python {params.nanosim}/simulator.py genome -rg {input.r} -c nanosim_training/bac_model/{wildcards.bac_ref}/{wildcards.bac_ref} -b albacore --num_threads {threads} --fastq -o nanosim/bac/{wildcards.bac_ref}"
+        "python {params.nanosim}/simulator.py genome -rg {input.r} -c nanosim_training/bac_model/{wildcards.bac_ref}/{wildcards.bac_ref}"
+        " -b albacore --num_threads {threads} --fastq -o nanosim/bac/{wildcards.bac_ref}"
 
 #fractionation and concatenation
 rule fraction_sr:
     input:
-        bac_fq1 = expand("art/bac/{bac_ref}_1.fq", bac_ref = config['bac_ref']),
-        bac_fq2 = expand("art/bac/{bac_ref}_2.fq", bac_ref = config['bac_ref'])
+        bac_fq1 = "art/bac/{bac_ref}_1.fq",
+        bac_fq2 = "art/bac/{bac_ref}_2.fq"
     output:
         out_fq1="fractions/{bac_ref}_{p}_1.fastq",
         out_fq2="fractions/{bac_ref}_{p}_2.fastq"
@@ -237,8 +238,8 @@ rule fraction_sr:
 
 rule concat_fractions_sr:
     input:
-        bac_fq1 = expand("fractions/{bac_ref}_{p}_1.fastq", bac_ref=config['bac_ref'], p=config['p']),
-        bac_fq2 = expand("fractions/{bac_ref}_{p}_2.fastq", bac_ref=config['bac_ref'], p=config['p']),
+        bac_fq1 = expand("fractions/{bac_ref}_{{p}}_1.fastq", bac_ref=config['bac_ref']),
+        bac_fq2 = expand("fractions/{bac_ref}_{{p}}_2.fastq", bac_ref=config['bac_ref']),
         hum_fq1 = "art/hum/Sample{n}_1.fq",
         hum_fq2 = "art/hum/Sample{n}_2.fq"
     output:
@@ -266,7 +267,7 @@ rule fraction_lr:
 
 rule concat_fractions_lr:
     input:
-        bac_fq = expand("fractions/long_read/{bac_ref}_{p}.fastq", bac_ref=config['bac_ref'], p=config['p']),
+        bac_fq = expand("fractions/long_read/{bac_ref}_{{p}}.fastq", bac_ref=config['bac_ref'], p=config['p']),
         hum_fq = "nanosim/hum/{n}_unaligned_reads.fastq",
     output:
         out_fq = "mixed/long_read/mixed_{p}_Sample{n}.fastq",

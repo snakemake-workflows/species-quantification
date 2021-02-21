@@ -1,0 +1,27 @@
+#Set the number of samples to be generated
+number_of_samples: 1
+
+#Reference genomes 
+bac_ref: ["GCF_006151785.1_ASM615178v1", "GCF_000622225.1_ASM62222v1"]
+
+#number of reads to be fractionated
+p: [1000, 10000]
+
+#parameters for short read simulation (fold_coverage required for art settings) #default: aroudn 800000 reads
+short_read_len: 150
+fold_coverage: 10 
+
+#parameters for long read simulation (around 20000 reads)
+long_nreads: 5000
+med_long_read_len:
+min_long_read_len: 300
+max_long_read_len: 1000
+
+#long read simulation resource files
+hum_pro: resources/human_NA12878_DNA_FAB49712_albacore #ready to use error profile for human
+ecoli_read: resources #e_coli read file, for more info, check: info.txt
+
+#path to nanosim installation (conda installation does not work for read_analysis.py)
+nanosim: /home/uzuner/Documents/Software/NanoSim/src
+
+

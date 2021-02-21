@@ -1,0 +1,6 @@
+name: nanosim
+channels:
+   - bioconda
+dependencies:
+   - nanosim
+   - scikit-learn=0.20

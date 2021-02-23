@@ -1,7 +1,7 @@
 configfile: "config/config.yaml"
 
 rule all:
-    input:
+    input:	
         "results/refs/chrY.fasta",
         "results/refs/hs_genome.fasta",
         expand(
@@ -42,10 +42,65 @@ rule all:
             "results/mixed_lr/mixed_{p}_Sample{n}.fastq",
             p=config["p"],
             n=range(1, config["number_of_samples"] + 1),
-        ),
+	),
+	
+	expand(
+	    "results/kraken2/sr/evol1_Sample{n}_fraction{p}",
+	    n=range(1, config["number_of_samples"] + 1),
+	    p=config["p"]),
+	
+	expand(
+	    "results/kraken2/sr/evol1_Sample{n}_fraction{p}.kraken",
+	    n=range(1, config["number_of_samples"] + 1),
+	    p=config["p"]),
+
+	expand(
+            "results/bracken/sr/evol1_Sample{n}_fraction{p}.bracken",
+            n=range(1, config["number_of_samples"] + 1),
+            p=config["p"]),
+
+
+	expand(
+	   "results/kraken2/lr/evol1_Sample{n}_fraction{p}",
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"]),
+	
+	expand(
+	   "results/kraken2/lr/evol1_Sample{n}_fraction{p}.kraken",
+            n=range(1, config["number_of_samples"] + 1),
+            p=config["p"]),
+
+	expand(
+           "results/bracken/lr/evol1_Sample{n}_fraction{p}.bracken",
+            n=range(1, config["number_of_samples"] + 1),
+            p=config["p"]),
+
+
+	expand(
+	   "results/sourmash/sr/sig/mixed_sample{n}_{p}_k51_R{e}.sig",
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"],
+           e={1, 2}),
+	
+	expand(
+	   "results/sourmash/sr/lca-class/mixed_sample{n}_{p}_R{e}.csv",
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"],
+           e={1, 2}),
+
+	expand(
+	   "results/sourmash/lr/sig/mixed_sample{n}_{p}_k51.sig",
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"]),
+
+	expand(
+	   "results/sourmash/lr/lca-class/mixed_sample{n}_{p}.csv",
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"])
 
 include: "rules/sr_simulation.smk"
 include: "rules/lr_simulation.smk"
 include: "rules/mixing.smk"
-
+include: "rules/abundances_sr.smk"
+include: "rules/abundances_lr.smk"
 

@@ -31,7 +31,7 @@ rule get_hs_genome:
 
 rule art_sim_hs:
     input:
-        "results/refs/chrY.fasta",
+        "results/refs/hs_genome.fasta",
     output:
         multiext("results/art/hum/Sample{art_hum}", "1.fq", "2.fq"),
     log:
@@ -43,7 +43,7 @@ rule art_sim_hs:
         length=config["short_read_len"],
         f_cov=config["fold_coverage"],
     shell:
-        "art_illumina -ss HS25 -i results/refs/chrY.fasta -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o"
+        "art_illumina -ss HS25 -i results/refs/hs_genome.fasta -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o"
         " results/art/hum/Sample{wildcards.art_hum} --noALN"
 
 

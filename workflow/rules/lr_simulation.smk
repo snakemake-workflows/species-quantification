@@ -1,6 +1,6 @@
 rule nanosim_hs:
     input:
-        ref="results/refs/chrY.fasta",
+        ref="results/refs/hs_genome.fasta",
         model=config["hum_pro"],
     output:
         "results/nanosim/hum/{n}_aligned_error_profile",
@@ -27,7 +27,7 @@ rule nanosim_bac_train:
         "results/nanosim_train/{bac_ref}/{bac_ref}_aligned_reads.pkl",
     log:
         "logs/nanosim_train/{bac_ref}_train.log",
-    threads: 4
+    threads: 10
     params:
         nanosim=config["nanosim"],  #conda installation does not work for read_analysis.py
     conda:
@@ -51,7 +51,7 @@ rule nanosim_bac_sim:
         "results/nanosim/bac/{bac_ref}_unaligned_reads.fastq",
     log:
         "logs/nanosim/bac/{bac_ref}.log",
-    threads: 4
+    threads: 10
     conda:
         "../envs/nanosim.yaml"
     params:

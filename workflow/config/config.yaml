@@ -23,6 +23,7 @@ ecoli_read: resources #e_coli read file, for more info, check: info.txt
 
 #abundance calculation resource files
 kraken2_db: resources/minikraken2_v2_8GB_201904_UPDATE
+sourmash_scale: 2000
 
 #path to nanosim installation (conda installation does not work for read_analysis.py)
 nanosim: /home/uzuner/NanoSim/src

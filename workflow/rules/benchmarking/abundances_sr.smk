@@ -3,32 +3,32 @@ rule kraken2_sr:
 	input:
 		fq1 = "results/mixed_sr/mixed_{p}_Sample{n}_1.fastq",
 		fq2 = "results/mixed_sr/mixed_{p}_Sample{n}_2.fastq",
-		db = "resources/kraken2-bacteria/bacterial-db"
+		db = "resources/kraken2-bacteria/standard_db"
 	output:
-		rep = "results/kraken2/sr/evol1_Sample{n}_fraction{p}",
-		kraken = "results/kraken2/sr/evol1_Sample{n}_fraction{p}.kraken"
+		rep = "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}",
+		kraken = "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken"
 	log:
-		"logs/kraken2/sr/Sample{n}_{p}.log"
+		"logs/kraken2/sr/sb/Sample{n}_{p}.log"
 	threads: 20
 	conda:
 		"../envs/kraken2.yaml"
 	shell:
 		"kraken2 --use-names --threads {threads} --db {input.db} --fastq-input --report "
-		" {output.rep} --paired {input.fq1} {input.fq2} > {output.kraken}"
+		" {output.rep} --paired {input.fq1} {input.fq2} > {output.kraken} 2> {log}"
 
 rule bracken_sr:
 	input:
-		db = "resources/kraken2-bacteria/bacterial-db",
-		rep = "results/kraken2/sr/evol1_Sample{n}_fraction{p}"
+		db = "resources/kraken2-bacteria/standard_db",
+		rep = "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}"
 	output:
-		bracken = "results/bracken/sr/evol1_Sample{n}_fraction{p}.bracken"
+		bracken = "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken"
 	log:
-		"logs/bracken/sr/Sample{n}_{p}.log"
+		"logs/bracken/sr/sb/Sample{n}_{p}.log"
 	threads: 2
 	conda:
 		"../envs/kraken2.yaml"
 	shell: 
-		"bracken -d {input.db} -i {input.rep} -l S -o {output}"		
+		"bracken -d {input.db} -i {input.rep} -l S -o {output} 2> {log}"		
 
 rule sourmash_comp_sr:
 	input:
@@ -42,7 +42,7 @@ rule sourmash_comp_sr:
 	params:
 		"{s}"
 	shell:
-		"sourmash compute --scaled {params} {input} -o {output} -k=51"
+		"sourmash compute --scaled {params} {input} -o {output} -k=51 2> {log}"
 
 
 rule sourmash_lca_sr:
@@ -56,7 +56,7 @@ rule sourmash_lca_sr:
 	conda:
 		"../envs/sourmash.yaml"
 	shell:
-		"sourmash lca summarize --query {input.sig} --db {input.db} -o {output}"
+		"sourmash lca summarize --query {input.sig} --db {input.db} -o {output} 2> {log}"
 
 
 

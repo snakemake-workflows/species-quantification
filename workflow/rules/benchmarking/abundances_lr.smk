@@ -1,32 +1,32 @@
 rule kraken2_lr:
 	input:
 		fq = "results/mixed_lr/mixed_{p}_Sample{n}.fastq",
-		db = "resources/kraken2-bacteria/bacterial-db"
+		db = "resources/kraken2-bacteria/standard_db_LR"
 	output:
-		rep = "results/kraken2/lr/evol1_Sample{n}_fraction{p}",
-		kraken = "results/kraken2/lr/evol1_Sample{n}_fraction{p}.kraken"
+		rep = "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}",
+		kraken = "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken"
 	log:
-		"logs/kraken2/lr/Sample{n}_{p}.log"
+		"logs/kraken2/lr/sb/Sample{n}_{p}.log"
 	threads: 20
 	conda:
 		"../envs/kraken2.yaml"
 	shell:
 		"kraken2 --use-names --threads {threads} --db {input.db} --fastq-input {input.fq} "
-		" --report {output.rep} > {output.kraken}"
+		" --report {output.rep} > {output.kraken} 2> {log}"
 
 rule bracken_lr:
 	input:
-		db = "resources/kraken2-bacteria/bacterial-db",
-		rep = "results/kraken2/lr/evol1_Sample{n}_fraction{p}"
+		db = "resources/kraken2-bacteria/standard_db_LR",
+		rep = "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}"
 	output:
-		bracken = "results/bracken/lr/evol1_Sample{n}_fraction{p}.bracken"
+		bracken = "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken"
 	log:
-		"logs/bracken/lr/Sample{n}_{p}.log"
+		"logs/bracken/lr/sb/Sample{n}_{p}.log"
 	threads: 2
 	conda:
 		"../envs/kraken2.yaml"
 	shell: 
-		"bracken -d {input.db} -i {input.rep} -l S -o {output}"		
+		"bracken -d {input.db} -i {input.rep} -l S -o {output} 2> {log}"		
  
 rule sourmash_comp_lr:
 	input:
@@ -40,7 +40,7 @@ rule sourmash_comp_lr:
 	params:
 		"{s}"
 	shell:
-		"sourmash compute --scaled {params} {input} -o {output} -k=21"
+		"sourmash compute --scaled {params} {input} -o {output} -k=21 2> {log}"
 
 rule sourmash_lca_lr:
 	input:
@@ -53,5 +53,5 @@ rule sourmash_lca_lr:
 	conda:
 		"../envs/sourmash.yaml"
 	shell:
-		"sourmash lca summarize --query {input.sig} --db {input.db} -o {output}"
+		"sourmash lca summarize --query {input.sig} --db {input.db} -o {output} 2> {log}"
 

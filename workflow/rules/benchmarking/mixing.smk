@@ -15,7 +15,7 @@ rule fraction_sr:
         "../envs/seqtk.yaml"
     shell:
         "seqtk sample -s100 {input.bac_fq1} {params} > {output.out_fq1}; "
-        "seqtk sample -s100 {input.bac_fq2} {params} > {output.out_fq2}"
+        "seqtk sample -s100 {input.bac_fq2} {params} > {output.out_fq2} 2> {log}"
 
 
 rule concat_fractions_sr:
@@ -40,7 +40,7 @@ rule concat_fractions_sr:
 
 rule fraction_lr:
     input:
-        bac_fq="results/nanosim/bac/{bac_ref}_unaligned_reads.fastq",
+        bac_fq="results/nanosim/bac/{bac_ref}_aligned_reads.fastq",
     output:
         out_fq="results/fractions/long_reads/{bac_ref}_{p}.fastq",
     log:
@@ -50,7 +50,7 @@ rule fraction_lr:
     conda:
         "../envs/seqtk.yaml"
     shell:
-        "seqtk sample -s100 {input.bac_fq} {params} > {output.out_fq}"
+        "seqtk sample -s100 {input.bac_fq} {params} > {output.out_fq} 2> {log}"
 
 
 rule concat_fractions_lr:
@@ -60,7 +60,7 @@ rule concat_fractions_lr:
             bac_ref=config["bac_ref"],
             p=config["p"],
         ),
-        hum_fq="results/nanosim/hum/{n}_unaligned_reads.fastq",
+        hum_fq="results/nanosim/hum/{n}_aligned_reads.fastq",
     output:
         out_fq="results/mixed_lr/mixed_{p}_Sample{n}.fastq",
     log:

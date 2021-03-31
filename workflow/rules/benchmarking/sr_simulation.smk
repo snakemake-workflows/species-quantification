@@ -44,7 +44,7 @@ rule art_sim_hs:
         f_cov=config["fold_coverage"],
     shell:
         "art_illumina -ss HS25 -i results/refs/hs_genome.fasta -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o"
-        " results/art/hum/Sample{wildcards.art_hum} --noALN"
+        " results/art/hum/Sample{wildcards.art_hum} --noALN 2> {log}"
 
 
 rule art_sim_bac:
@@ -61,5 +61,5 @@ rule art_sim_bac:
         length=config["short_read_len"],
         f_cov=config["fold_coverage"],
     shell:
-        "art_illumina -ss HS25 -i {input} -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o results/art/bac/{wildcards.bac_ref} --noALN"
+        "art_illumina -ss HS25 -i {input} -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o results/art/bac/{wildcards.bac_ref} --noALN 2> {log}"
 

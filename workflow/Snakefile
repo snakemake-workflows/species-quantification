@@ -1,8 +1,7 @@
 configfile: "config/config.yaml"
 
 rule all:
-    input:
-        "results/final_abundance/scatter_plot/sr/final_abundance_all_samples_coord_fixed.pdf"    
+    input:	
         "results/refs/hs_genome.fasta",
         expand(
             "results/art/hum/Sample{art_hum}_1.fq",
@@ -14,9 +13,8 @@ rule all:
             n=range(1, config["number_of_samples"] + 1),
         ),
         expand(
-            "results/nanosim_train/{bac_ref}/{bac_ref}_aligned_reads.pkl",
-            bac_ref=config["bac_ref"],
-        ),
+            "results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2_aligned_reads.pkl"
+	),
         expand(
             "results/nanosim/bac/{bac_ref}_aligned_reads.fastq",
             bac_ref=config["bac_ref"],
@@ -42,71 +40,73 @@ rule all:
             "results/mixed_lr/mixed_{p}_Sample{n}.fastq",
             p=config["p"],
             n=range(1, config["number_of_samples"] + 1),
-        ),
+	),
 	
-        expand(
-            "results/kraken2/sr/evol1_Sample{n}_fraction{p}",
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"]),
-        
-        expand(
-            "results/kraken2/sr/evol1_Sample{n}_fraction{p}.kraken",
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"]),
+	expand(
+	    "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}",
+	    n=range(1, config["number_of_samples"] + 1),
+	    p=config["p"]),
+	
+	expand(
+	    "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken",
+	    n=range(1, config["number_of_samples"] + 1),
+	    p=config["p"]),
 
-        expand(
-            "results/bracken/sr/evol1_Sample{n}_fraction{p}.bracken",
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"]),
-
-
-        expand(
-            "results/kraken2/lr/evol1_Sample{n}_fraction{p}",
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"]),
-        
-        expand(
-            "results/kraken2/lr/evol1_Sample{n}_fraction{p}.kraken",
+	expand(
+            "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken",
             n=range(1, config["number_of_samples"] + 1),
             p=config["p"]),
 
-        expand(
-            "results/bracken/lr/evol1_Sample{n}_fraction{p}.bracken",
+
+	expand(
+	   "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}",
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"]),
+	
+	expand(
+	   "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken",
             n=range(1, config["number_of_samples"] + 1),
             p=config["p"]),
 
-        expand(
-            "results/sourmash/sr/sig/Scaled_{s}_mixed_sample{n}_{p}_k51_R{e}.sig",
-            s=config["sourmash_scale"],
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"],
-            e={1, 2}),
-        
-        expand(
-        "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv",
-            s=config["sourmash_scale"],
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"],
-            e={1, 2}),
-
-        expand(
-        "results/sourmash/lr/sig/Scaled_{s}_mixed_sample{n}_{p}_k21.sig",
-            s=config["sourmash_scale"],
-            n=range(1, config["number_of_samples"] + 1),
+	expand(
+           "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken",
+           n=range(1, config["number_of_samples"] + 1),
             p=config["p"]),
 
-        expand(
-        "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv",
-            s=config["sourmash_scale"],
-            n=range(1, config["number_of_samples"] + 1),
-            p=config["p"]),
+	expand(
+	   "results/sourmash/sr/sig/Scaled_{s}_mixed_sample{n}_{p}_k51_R{e}.sig",
+	   s=config["sourmash_scale"],
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"],
+           e={1, 2}),
+	
+	expand(
+	   "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv",
+	   s=config["sourmash_scale"],
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"],
+           e={1, 2}),
 
-        
-        
+	expand(
+	   "results/sourmash/lr/sig/Scaled_{s}_mixed_sample{n}_{p}_k21.sig",
+	   s=config["sourmash_scale"],
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"]),
 
-include: "rules/sr_simulation.smk"
-include: "rules/lr_simulation.smk"
-include: "rules/mixing.smk"
-include: "rules/abundances_sr.smk"
-include: "rules/abundances_lr.smk"
-include: "rules/plot_abundance.smk"
+	expand(
+	   "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv",
+	   s=config["sourmash_scale"],
+	   n=range(1, config["number_of_samples"] + 1),
+           p=config["p"]),
+	
+	"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples_coord_fixed.pdf",
+        "results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples.csv",
+        "results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples_coord_fixed.pdf",
+        "results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples.csv"
+
+include: "rules/benchmarking/sr_simulation.smk"
+include: "rules/benchmarking/lr_simulation.smk"
+include: "rules/benchmarking/mixing.smk"
+include: "rules/benchmarking/abundances_sr.smk"
+include: "rules/benchmarking/abundances_lr.smk"
+include: "rules/benchmarking/plot_abundance.smk"

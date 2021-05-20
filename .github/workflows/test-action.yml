@@ -1,0 +1,16 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+      steps:
+        - name: snakemake
+          uses: snakemake/snakemake-github-action@v1.18.0
+
+

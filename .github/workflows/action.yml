@@ -13,15 +13,15 @@ jobs:
       - name: Linting
       - uses: snakemake/snakemake-github-action@v1.18.0
   	  with:
-    	  directory: '.test'
-          snakefile: 'workflow/Snakefile'
-        args: '--lint'
+       	    directory: '.test'
+            snakefile: 'workflow/Snakefile'
+            args: '--lint'
   Testing:	
     runs-on: ubuntu-latest
     steps:   
       - name: Testing
       - uses: snakemake/snakemake-github-action@v1.18.0
           with:
-          directory: '.test'
-          snakefile: 'workflow/Snakefile'
-        args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
+            directory: '.test'
+            snakefile: 'workflow/Snakefile'
+            args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'

@@ -9,7 +9,6 @@ on:
 jobs:
   Linting:
     runs-on: ubuntu-latest
-    steps:
       - name: Linting
       - uses: snakemake/snakemake-github-action@v1.18.0
       - with:
@@ -17,8 +16,7 @@ jobs:
           snakefile: 'workflow/Snakefile'
           args: '--lint'
   Testing:	
-    runs-on: ubuntu-latest
-    steps:   
+    runs-on: ubuntu-latest 
       - name: Testing
       - uses: snakemake/snakemake-github-action@v1.18.0
       - with:

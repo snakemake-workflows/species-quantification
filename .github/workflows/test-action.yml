@@ -9,8 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-      steps:
-        - name: snakemake
-          uses: snakemake/snakemake-github-action@v1.18.0
+      - name: snakemake
+        uses: snakemake/snakemake-github-action@v1.18.0
 
 

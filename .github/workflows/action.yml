@@ -7,19 +7,16 @@ on:
     branches: [ master ]
 
 jobs:
-  Linting:
-    runs-on: ubuntu-latest
-      - name: Linting
-      - uses: snakemake/snakemake-github-action@v1.18.0
-      - with:
-          directory: '.test'
-          snakefile: 'workflow/Snakefile'
-          args: '--lint'
-  Testing:	
-    runs-on: ubuntu-latest 
-      - name: Testing
-      - uses: snakemake/snakemake-github-action@v1.18.0
-      - with:
-          directory: '.test'
-          snakefile: 'workflow/Snakefile'
-          args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
+  runs-on: ubuntu-latest
+    - name: Linting
+      uses: snakemake/snakemake-github-action@v1.18.0
+      with:
+        directory: '.test'
+        snakefile: 'workflow/Snakefile'
+        args: '--lint'
+    - name: Testing
+      uses: snakemake/snakemake-github-action@v1.18.0
+      with:
+        directory: '.test'
+        snakefile: 'workflow/Snakefile'
+        args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'

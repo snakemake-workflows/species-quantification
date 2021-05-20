@@ -10,6 +10,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: snakemake
+      - name: Linting
         uses: snakemake/snakemake-github-action@v1.18.0
+        with:
+          directory: '.test'
+          snakefile: 'workflow/Snakefile'
+          args: '--lint'
+      - name: Testing
+        uses: snakemake/snakemake-github-action@v1.18.0
+         with:
+           directory: '.test'
+           snakefile: 'workflow/Snakefile'
+           args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
 

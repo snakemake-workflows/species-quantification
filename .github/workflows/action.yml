@@ -1,11 +1,9 @@
-- name: Tumor-microbiome-calling
-  uses: snakemake/snakemake-github-action@v1.18.0
+- uses: snakemake/snakemake-github-action@v1.18.0
   with:
     directory: '.test'
     snakefile: 'workflow/Snakefile'
     args: '--lint'
-- name: Tumor-microbiome-calling
-  uses: snakemake/snakemake-github-action@v1.18.0
+- uses: snakemake/snakemake-github-action@v1.18.0
   with:
     directory: '.test'
     snakefile: 'workflow/Snakefile'

@@ -1,19 +1,3 @@
-rule get_chromosome:
-    output:
-        "results/refs/chrY.fasta",
-    params:
-        species="homo_sapiens",
-        datatype="dna",
-        build="GRCh38",
-        release="102",
-        chromosome="Y",
-    log:
-        "logs/ensembl/get_seq.log",
-    cache: True  # save space and time with between workflow caching (see docs)
-    wrapper:
-        "0.70.0/bio/reference/ensembl-sequence"
-
-
 rule get_hs_genome:
     output:
         "results/refs/hs_genome.fasta",

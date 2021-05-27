@@ -1,3 +1,6 @@
+#samples
+fastq: "config/samples.tsv"
+
 #Set the number of samples to be generated
 number_of_samples: 1
 

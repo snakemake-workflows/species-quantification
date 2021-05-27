@@ -20,7 +20,7 @@ rule nanosim_hs:
 rule nanosim_bac_train:
     input:
         read=config["ecoli_read"] + "/sra_data.fastq",
-        r="resources/bac_refs/GCF_000008865.2_ASM886v2_chr.fna", #ecoli genome
+        r="resources/bac_refs/GCF_000008865.2_ASM886v2_chr_genomic.fna", #ecoli genome
     output:
         "results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2_aligned_reads.pkl",
     log:

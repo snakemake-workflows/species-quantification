@@ -21,10 +21,10 @@ rule fraction_sr:
 rule concat_fractions_sr:
     input:
         bac_fq1=expand(
-            "results/fractions/short_reads/{bac_ref}_{{p}}_1.fastq", bac_ref=config["bac_ref"]
+            "results/fractions/short_reads/{bac_ref}_{{p}}_1.fastq", bac_ref=bac.bacteria
         ),
         bac_fq2=expand(
-            "results/fractions/short_reads/{bac_ref}_{{p}}_2.fastq", bac_ref=config["bac_ref"]
+            "results/fractions/short_reads/{bac_ref}_{{p}}_2.fastq", bac_ref=bac.bacteria
         ),
         hum_fq1="results/art/hum/Sample{n}_1.fq",
         hum_fq2="results/art/hum/Sample{n}_2.fq",
@@ -57,7 +57,7 @@ rule concat_fractions_lr:
     input:
         bac_fq=expand(
             "results/fractions/long_reads/{bac_ref}_{{p}}.fastq",
-            bac_ref=config["bac_ref"],
+            bac_ref=bac.bacteria,
             p=config["p"],
         ),
         hum_fq="results/nanosim/hum/{n}_aligned_reads.fastq",

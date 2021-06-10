@@ -1,12 +1,27 @@
+rule kraken_build:
+	output:
+		"resources/kraken2-db/standard_db"
+	log:
+		"logs/kraken2-build/kraken_db.log"
+	threads: 20
+	params:
+		read_len = 100 #default value, please note that Bracken wasn't necessarily designed to run on nanopore data.
+	conda:
+		"../envs/kraken2.yaml"
+	cache: True
+	shell:
+		"kraken2-build --standard --threads {threads} --db {output} &&"
+		"bracken-build -d {output} -l {params.read_len}"
+		
 rule kraken2:
 	input:
-		fq = "resources/data/{sample}.fastq",
-		db = "resources/kraken2-bacteria/standard_db_LR"
+		fq = get_fastq_input,
+		db = "resources/kraken2-db/standard_db",
 	output:
-		rep = "results/kraken2/evol1_{sample}",
-		kraken = "results/kraken2/evol1_{sample}.kraken"
+		rep = "results/kraken2/{sample}/evol1_{sample}_{unit}",
+		kraken = "results/kraken2/{sample}/evol1_{sample}_{unit}.kraken"
 	log:
-		"logs/kraken2/{sample}.log"
+		"logs/kraken2/{sample}_{unit}.log"
 	threads: 20
 	conda:
 		"../envs/kraken2.yaml"
@@ -16,12 +31,12 @@ rule kraken2:
 
 rule bracken:
 	input:
-		db = "resources/kraken2-bacteria/standard_db_LR",
-		rep = "results/kraken2/evol1_{sample}"
+		db = "resources/kraken2-db/standard_db",
+		rep = "results/kraken2/{sample}/evol1_{sample}_{unit}"
 	output:
-		bracken = "results/bracken/evol1_{sample}.bracken"
+		bracken = "results/bracken/{sample}/evol1_{sample}_{unit}.bracken"
 	log:
-		"logs/bracken/{sample}.log"
+		"logs/bracken/{sample}_{unit}.log"
 	threads: 2
 	conda:
 		"../envs/kraken2.yaml"
@@ -30,11 +45,11 @@ rule bracken:
  
 rule sourmash_comp:
 	input:
-		fq = "resources/data/{sample}.fastq"
+		get_fastq_input,
 	output:
-		sig = "results/sourmash/sig/{sample}_k21.sig"
+		sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k21.sig"
 	log:
-		"logs/sourmash-compute/{sample}.log"
+		"logs/sourmash-compute/{sample}_{unit}.log"
 	conda:
 		"../envs/sourmash.yaml"
 	shell:
@@ -42,12 +57,12 @@ rule sourmash_comp:
 
 rule sourmash_lca:
 	input:
-		sig = "results/sourmash/sig/{sample}_k21.sig",
+		sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k21.sig",
 		db = "resources/sourmash/genbank-k21.lca.json"
 	output:
-		sum = "results/sourmash/lca-class/{sample}_k21.csv"
+		sum = "results/sourmash/lca-class/{sample}/{sample}_{unit}_k21.csv"
 	log:
-		"logs/sourmash-lca/{sample}.log"
+		"logs/sourmash-lca/{sample}_{unit}.log"
 	conda:
 		"../envs/sourmash.yaml"
 	shell:

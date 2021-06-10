@@ -3,111 +3,117 @@ import pandas as pd
 configfile: "config/config.yaml"
 
 bac = pd.read_csv(config["bacteria"], sep ="\t")
-samples = pd.read_csv(config["fastq"], sep ="\t") 
+
+samples = pd.read_csv(config["samples"], sep ="\t") 
+units = pd.read_csv(config["units"], sep ="\t", ).set_index(["sample_name", "unit_name"], drop=False)
+
+
+def get_fastq_input(wildcards):
+   files = units.loc[wildcards.sample].loc[wildcards.unit, "fq"]
+   return [files]
 
 rule all:
    input:
-      expand("results/kraken2/evol1_{sample}", sample=samples.fq),
-      expand("results/kraken2/evol1_{sample}.kraken", sample=samples.fq),
-      expand("results/bracken/evol1_{sample}.bracken", sample=samples.fq),
-      expand("results/sourmash/sig/{sample}_k21.sig", sample=samples.fq),
-      expand("results/sourmash/lca-class/{sample}_k21.csv", sample=samples.fq)
+      expand("results/bracken/{unit.sample_name}/evol1_{unit.sample_name}_{unit.unit_name}.bracken", unit=units.itertuples()),
+      expand("results/sourmash/lca-class/{unit.sample_name}/{unit.sample_name}_{unit.unit_name}_k21.csv", unit=units.itertuples()),
 
-#        "results/refs/hs_genome.fasta",
-#        expand(
-#            "results/art/hum/Sample{art_hum}_1.fq",
-#            art_hum=range(1, config["number_of_samples"] + 1),
-#        ),
-#        expand("results/art/bac/{bac_ref}_1.fq", bac_ref=bac.bacteria),
-#        expand(
-#            "results/nanosim/hum/{n}_aligned_reads.fastq",
-#            n=range(1, config["number_of_samples"] + 1),
-#        ),
-#        expand(
-#            "results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2_aligned_reads.pkl"
-#        ),
-#        expand(
-#            "results/nanosim/bac/{bac_ref}_aligned_reads.fastq",
-#            bac_ref=bac.bacteria,
-#        ),
-#        expand(
-#            "results/fractions/short_reads/{bac_ref}_{p}_{k}.fastq",
-#            bac_ref=bac.bacteria,
-#            p=config["p"],
-#            k={1, 2},
-#        ),
-#        expand(
-#            "results/mixed_sr/mixed_{p}_Sample{n}_{k}.fastq",
-#            p=config["p"],
-#            n=range(1, config["number_of_samples"] + 1),
-#            k={1, 2},
-#        ),
-#        expand(
-#            "results/fractions/long_reads/{bac_ref}_{p}.fastq",
-#            bac_ref=bac.bacteria,
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/mixed_lr/mixed_{p}_Sample{n}.fastq",
-#            p=config["p"],
-#            n=range(1, config["number_of_samples"] + 1),
-#        ),
-#        expand(
-#            "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}",
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken",
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken",
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}",
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken",
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken",
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/sourmash/sr/sig/Scaled_{s}_mixed_sample{n}_{p}_k51_R{e}.sig",
-#            s=config["sourmash_scale"],
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#            e={1, 2},
-#        ),
-#        expand(
-#            "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv",
-#            s=config["sourmash_scale"],
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#            e={1, 2},
-#        ),
-#        expand(
-#            "results/sourmash/lr/sig/Scaled_{s}_mixed_sample{n}_{p}_k21.sig",
-#            s=config["sourmash_scale"],
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
-#        expand(
-#            "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv",
-#            s=config["sourmash_scale"],
-#            n=range(1, config["number_of_samples"] + 1),
-#            p=config["p"],
-#        ),
+rule benchmark:
+   input:      
+      "results/refs/hs_genome.fasta",
+      expand(
+            "results/art/hum/Sample{art_hum}_1.fq",
+            art_hum=range(1, config["number_of_samples"] + 1),
+      ),
+      expand("results/art/bac/{bac_ref}_1.fq", bac_ref=bac.bacteria),
+      expand(
+          "results/nanosim/hum/{n}_aligned_reads.fastq",
+          n=range(1, config["number_of_samples"] + 1),
+      ),
+      expand(
+          "results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2_aligned_reads.pkl"
+      ),
+      expand(
+          "results/nanosim/bac/{bac_ref}_aligned_reads.fastq",
+          bac_ref=bac.bacteria,
+      ),
+      expand(
+          "results/fractions/short_reads/{bac_ref}_{p}_{k}.fastq",
+          bac_ref=bac.bacteria,
+          p=config["p"],
+          k={1, 2},
+      ),
+      expand(
+          "results/mixed_sr/mixed_{p}_Sample{n}_{k}.fastq",
+          p=config["p"],
+          n=range(1, config["number_of_samples"] + 1),
+          k={1, 2},
+      ),
+      expand(
+          "results/fractions/long_reads/{bac_ref}_{p}.fastq",
+          bac_ref=bac.bacteria,
+          p=config["p"],
+      ),
+      expand(
+          "results/mixed_lr/mixed_{p}_Sample{n}.fastq",
+          p=config["p"],
+          n=range(1, config["number_of_samples"] + 1),
+      ),
+      expand(
+          "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}",
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken",
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken",
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}",
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken",
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken",
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/sourmash/sr/sig/Scaled_{s}_mixed_sample{n}_{p}_k51_R{e}.sig",
+          s=config["sourmash_scale"],
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+          e={1, 2},
+      ),
+      expand(
+          "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv",
+          s=config["sourmash_scale"],
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+           e={1, 2},
+      ),
+      expand(
+          "results/sourmash/lr/sig/Scaled_{s}_mixed_sample{n}_{p}_k21.sig",
+          s=config["sourmash_scale"],
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
+      expand(
+          "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv",
+          s=config["sourmash_scale"],
+          n=range(1, config["number_of_samples"] + 1),
+          p=config["p"],
+      ),
 
 #include: "rules/benchmarking/sr_simulation.smk"
 #include: "rules/benchmarking/lr_simulation.smk"
@@ -115,3 +121,5 @@ rule all:
 #include: "rules/benchmarking/abundances_sr.smk"
 #include: "rules/benchmarking/abundances_lr.smk"
 include: "rules/abundances.smk"
+include: "rules/benchmarking.smk"
+

@@ -3,5 +3,6 @@ workflow/report
 workflow/resources
 workflow/results
 workflow/.snakemake
+workflow/data
 .snakemake
 workflow/scripts/abundance_estimation.py

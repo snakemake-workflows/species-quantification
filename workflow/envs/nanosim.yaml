@@ -1,0 +1,6 @@
+name: nanosim
+channels:
+   - bioconda
+dependencies:
+   - nanosim
+   - python=3.7

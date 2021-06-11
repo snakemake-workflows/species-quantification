@@ -1,11 +1,10 @@
-###For quantification
+##For quantification
 #samples
 samples: config/samples.tsv
 units: config/units.tsv
 
-
-###For benchmarking
-benchmarking: true
+##For benchmarking
+benchmarking: false
 
 #Set the number of samples to be generated
 number_of_samples: 1

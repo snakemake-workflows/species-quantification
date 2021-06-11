@@ -50,7 +50,7 @@ rule art_sim_bac:
 rule nanosim_hs:
     input:
         ref="results/refs/hs_genome.fasta",
-        model=config["hum_pro"],
+        model="resources/human_NA12878_DNA_FAB49712_guppy"
     output:
         "results/nanosim/hum/{n}_aligned_error_profile",
         "results/nanosim/hum/{n}_aligned_reads.fastq",
@@ -58,11 +58,13 @@ rule nanosim_hs:
     log:
         "logs/nanosim/hum/{n}.log",
     threads: 30
+    conda:
+        "../envs/nanosim.yaml"
     params:
         med_len=config["med_long_read_len"],  #add -med for median length
         nreads=config["long_nreads"],
     shell:
-        "resources/NanoSim/src/simulator.py genome -rg {input.ref} -c {input.model}/training -b guppy --num_threads {threads}"
+        "simulator.py genome -rg {input.ref} -c {input.model}/training -b guppy --num_threads {threads}"
         " --fastq -o results/nanosim/hum/{wildcards.n} -n {params.nreads} 2> {log}"
 
 
@@ -75,8 +77,10 @@ rule nanosim_bac_train:
     log:
         "logs/nanosim_train/ecoli_train.log",
     threads: 30
+    conda:	
+        "../envs/nanosim.yaml"
     shell:
-        "resources/NanoSim/src/read_analysis.py genome -i {input.read} -rg {input.r} --num_threads {threads}"
+        "read_analysis.py genome -i {input.read} -rg {input.r} --num_threads {threads}"
         " -o results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2 2> {log}"
 
 
@@ -91,11 +95,13 @@ rule nanosim_bac_sim:
     log:
         "logs/nanosim/bac/{bac_ref}.log",
     threads: 30
+    conda:
+        "../envs/nanosim.yaml"
     params:
         med_len=config["med_long_read_len"],
 	nreads=config["long_nreads"]
     shell:
-        "resources/NanoSim/src/simulator.py genome -rg {input.r} -c results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2"
+        "simulator.py genome -rg {input.r} -c results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2"
         " -b guppy --num_threads {threads} --fastq -o results/nanosim/bac/{wildcards.bac_ref} -dna_type circular -n {params.nreads} 2> {log}"
         #add -med for median length
 
@@ -168,11 +174,27 @@ rule concat_fractions_lr:
     shell:
         "cat {input.hum_fq} {input.bac_fq} > {output.out_fq}"
 
+#rule kraken_build:
+#        output:
+#                "resources/kraken2-db/standard_db"
+#        log:
+#                "logs/kraken2-build/kraken_db.log"
+#        threads: 20
+#        params:
+#                read_len = 100 #default value, please note that Bracken wasn't necessarily designed to run on nanopore data.
+#        conda:
+#                "../envs/kraken2.yaml"
+#        cache: True
+#        shell:
+#                "kraken2-build --standard --threads {threads} --db {output} &&"
+#                "bracken-build -d {output} -l {params.read_len}"
+#
+#
 rule kraken2_sr:
 	input:
 		fq1 = "results/mixed_sr/mixed_{p}_Sample{n}_1.fastq",
 		fq2 = "results/mixed_sr/mixed_{p}_Sample{n}_2.fastq",
-		db = "resources/kraken2-bacteria/standard_db"
+		db = "resources/kraken2-db/standard_db"
 	output:
 		rep = "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}",
 		kraken = "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken"
@@ -187,7 +209,7 @@ rule kraken2_sr:
 
 rule bracken_sr:
 	input:
-		db = "resources/kraken2-bacteria/standard_db",
+		db = "resources/kraken2-db/standard_db",
 		rep = "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}"
 	output:
 		bracken = "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken"
@@ -232,7 +254,7 @@ rule sourmash_lca_sr:
 rule kraken2_lr:
 	input:
 		fq = "results/mixed_lr/mixed_{p}_Sample{n}.fastq",
-		db = "resources/kraken2-bacteria/standard_db_LR"
+		db = "resources/kraken2-db/standard_db"
 	output:
 		rep = "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}",
 		kraken = "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken"
@@ -247,7 +269,7 @@ rule kraken2_lr:
 
 rule bracken_lr:
 	input:
-		db = "resources/kraken2-bacteria/standard_db_LR",
+		db = "resources/kraken2-db/standard_db",
 		rep = "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}"
 	output:
 		bracken = "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken"

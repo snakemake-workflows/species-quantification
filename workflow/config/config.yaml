@@ -28,7 +28,8 @@ max_long_read_len: 1000
 
 #long read simulation resource files
 hum_pro: resources/human_NA12878_DNA_FAB49712_guppy #ready to use error profile for human
-ecoli_read: resources #e_coli read file, for more info, check: info.txt
+
+#info about e_coli read: check: info.txt
 
 #additional
 sourmash_scale: 2000

@@ -13,12 +13,12 @@ jobs:
       - name: Linting
         uses: snakemake/snakemake-github-action@v1.18.0	
         with:
-          directory: '.'
+          directory: '.test'
           snakefile: 'workflow/Snakefile'
           args: '--lint'      
       - name: Testing
         uses: snakemake/snakemake-github-action@v1.18.0
         with:
-          directory: '.'
+          directory: '.test'
           snakefile: 'workflow/Snakefile'
           args: '--cores 1 --show-failed-logs --use-conda --conda-cleanup-pkgs cache --conda-frontend mamba'

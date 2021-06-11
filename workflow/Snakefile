@@ -10,7 +10,7 @@ def get_fastq_input(wildcards):
    files = units.loc[wildcards.sample].loc[wildcards.unit, "fq"]
    return [files]
 
-if config["benchmarking"] == false:
+if config["benchmarking"] == False:
    rule all:
       input:
          expand("results/bracken/{unit.sample_name}/evol1_{unit.sample_name}_{unit.unit_name}.bracken", unit=units.itertuples()),
@@ -19,7 +19,7 @@ if config["benchmarking"] == false:
 #only if benchmarking is set to true
 bac = pd.read_csv(config["bacteria"], sep ="\t")
 
-elif config["benchmarking"] == true:
+if config["benchmarking"] == True:
    rule all:
       input:      
          expand(

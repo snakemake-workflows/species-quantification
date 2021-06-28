@@ -1,4 +1,4 @@
 sample_name	unit_name	fq
 mixed_1000	unit1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/mixed_1000_Sample1.fastq
 mixed_10000	unit2	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/mixed_10000_Sample1.fastq
-
+kelly	unit3	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/Kelly.fastq

@@ -5,7 +5,7 @@ units: config/units.tsv
 
 
 ###For benchmarking
-benchmarking: True
+benchmarking: False
 
 #Set the number of samples to be generated
 number_of_samples: 1

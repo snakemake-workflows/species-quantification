@@ -1,6 +1,9 @@
+container: "docker://continuumio/miniconda3"
+
 include: "rules/common.smk"
 include: "rules/abundances.smk"
 include: "rules/benchmarking.smk"
+
 
 if config["benchmarking"] == False:
    rule all:

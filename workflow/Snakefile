@@ -1,4 +1,4 @@
-container: "docker://continuumio/miniconda3"
+container: "docker://conda/miniconda3"
 
 include: "rules/common.smk"
 include: "rules/abundances.smk"

@@ -10,7 +10,7 @@ rule kraken_build:
 		"../envs/kraken2.yaml"
 	cache: True
 	shell:
-		"kraken2-build --standard --threads {threads} --db {output} &&"
+		"kraken2-build --standard --threads {threads} --db {output} && "
 		"bracken-build -d {output} -l {params.read_len}"
 		
 rule kraken2:

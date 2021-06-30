@@ -1,0 +1,2 @@
+Unknown option: fastq-input
+kraken2: database ("resources/kraken2-db/standard_db") does not contain necessary file taxo.k2d

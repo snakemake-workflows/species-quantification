@@ -1,6 +1,7 @@
 rule kraken_build:
 	output:
-		"resources/kraken2-db/standard_db"
+		db = "resources/kraken2-db/standard_db",
+		mock = "resources/kraken2-db/standard_db/mock.txt"
 	log:
 		"logs/kraken2-build/kraken_db.log"
 	threads: 20
@@ -10,8 +11,8 @@ rule kraken_build:
 		"../envs/kraken2.yaml"
 	cache: True
 	shell:
-		"kraken2-build --standard --threads {threads} --db {output} && "
-		"bracken-build -d {output} -l {params.read_len}"
+		"kraken2-build --standard --threads {threads} --db {output.db} && "
+		"bracken-build -d {output.db} -l {params.read_len} && touch {output.mock}"
 		
 rule kraken2:
 	input:

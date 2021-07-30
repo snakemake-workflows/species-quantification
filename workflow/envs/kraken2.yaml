@@ -4,4 +4,3 @@ channels:
 dependencies:
    - kraken2
    - bracken
-

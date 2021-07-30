@@ -20,8 +20,9 @@ jobs:
   Testing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Checkout tst
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@2.0.0
 
       - name: Test workflow 
@@ -29,4 +30,4 @@ jobs:
         with:
           directory: .test
           snakefile: workflow/Snakefile
-          args: "-j 4 --show-failed-logs --use-conda --conda-frontend mamba"
+          args: "--cores 2 --use-conda --show-failed-logs --conda-frontend mamba --conda-cleanup-pkgs cache"

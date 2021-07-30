@@ -13,8 +13,8 @@ rule kraken_build:
 	cache: True
 	shell:
 		"kraken2-build --download-taxonomy --skip-maps --db {output.db} &&" #only required to download test database
-		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --clean --db {output.db}"
-		#"bracken-build -d {output.db} -l {params.read_len} && touch {output.mock}"
+		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --clean --db {output.db} &&"
+		"bracken-build -d {output.db} -l {params.read_len} && touch {output.mock}"
 		
 rule kraken2:
 	input:

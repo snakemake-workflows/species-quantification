@@ -4,7 +4,7 @@ samples: config/samples.tsv
 units: config/units.tsv
 
 #kraken db
-dbtype: "--download-library plasmid"
+dbtype: "--special silva"
 
 ##For benchmarking
 benchmarking: false

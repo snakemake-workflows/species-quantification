@@ -25,4 +25,4 @@ jobs:
         with:
           directory: .test
           snakefile: workflow/Snakefile
-          args: "j 4 --show-failed-logs --use-conda --conda-frontend mamba"
+          args: "-j 4 --show-failed-logs --use-conda --conda-frontend mamba"

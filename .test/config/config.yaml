@@ -3,6 +3,9 @@
 samples: config/samples.tsv
 units: config/units.tsv
 
+#kraken db
+dbtype: "--download-library UniVec_Core"
+
 ##For benchmarking
 benchmarking: false
 

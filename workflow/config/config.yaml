@@ -3,6 +3,9 @@
 samples: config/samples.tsv
 units: config/units.tsv
 
+#kraken db
+dbtype: "--standard"
+
 
 ###For benchmarking
 benchmarking: True

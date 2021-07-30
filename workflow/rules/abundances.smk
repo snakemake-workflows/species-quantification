@@ -1,23 +1,25 @@
 rule kraken_build:
 	output:
-		db = "resources/kraken2-db/standard_db",
-		mock = "resources/kraken2-db/standard_db/mock.txt"
+		db = "resources/kraken2-db",
+                mock = "resources/kraken2-db/mock.txt"
 	log:
 		"logs/kraken2-build/kraken_db.log"
 	threads: 20
 	params:
-		read_len = 100 #default value, please note that Bracken wasn't necessarily designed to run on nanopore data.
+		read_len = 100, #default value, please note that Bracken wasn't necessarily designed to run on nanopore data.
+                dbtype = config["dbtype"]
 	conda:
 		"../envs/kraken2.yaml"
 	cache: True
 	shell:
-		"kraken2-build --standard --threads {threads} --db {output.db} && "
+		"kraken2-build --download-taxonomy --db {output.db} &&" #only required to download test database
+		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && "
 		"bracken-build -d {output.db} -l {params.read_len} && touch {output.mock}"
 		
 rule kraken2:
 	input:
 		fq = get_fastq_input,
-		db = "resources/kraken2-db/standard_db",
+		db = "resources/kraken2-db",
 	output:
 		rep = "results/kraken2/{sample}/evol1_{sample}_{unit}",
 		kraken = "results/kraken2/{sample}/evol1_{sample}_{unit}.kraken"
@@ -32,7 +34,7 @@ rule kraken2:
 
 rule bracken:
 	input:
-		db = "resources/kraken2-db/standard_db",
+		db = "resources/kraken2-db",
 		rep = "results/kraken2/{sample}/evol1_{sample}_{unit}"
 	output:
 		bracken = "results/bracken/{sample}/evol1_{sample}_{unit}.bracken"

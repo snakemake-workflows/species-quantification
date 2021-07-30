@@ -4,7 +4,7 @@ samples: config/samples.tsv
 units: config/units.tsv
 
 #kraken db
-dbtype: "--special greengenes"
+dbtype: "--download-library plasmid"
 
 ##For benchmarking
 benchmarking: false

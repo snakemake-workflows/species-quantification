@@ -4,7 +4,7 @@ samples: config/samples.tsv
 units: config/units.tsv
 
 #kraken db
-dbtype: "--special silva"
+dbtype: "--special greengenes"
 
 ##For benchmarking
 benchmarking: false

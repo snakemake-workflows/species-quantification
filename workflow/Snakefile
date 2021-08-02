@@ -13,7 +13,7 @@ include: "rules/benchmarking.smk"
 if config["benchmarking"] == False:
    rule all:
       input:
-         "resources/kraken2-db/mock.txt",
+         expand("results/kraken2-db/mock{e}.txt", e={1,2}),
          expand("results/bracken/{unit.sample_name}/evol1_{unit.sample_name}_{unit.unit_name}.bracken", unit=units.itertuples()),
          expand("results/sourmash/lca-class/{unit.sample_name}/{unit.sample_name}_{unit.unit_name}_k21.csv", unit=units.itertuples()),
 

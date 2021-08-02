@@ -1,7 +1,9 @@
-rule kraken_build:
+ruleorder: kraken2_build > bracken_build
+
+rule kraken2_build:
 	output:
-		db = directory("resources/kraken2-db"),
-                mock = "resources/kraken2-db/mock.txt"
+		db = directory("results/kraken2-db"),
+                mock1 = "results/kraken2-db/mock1.txt"
 	log:
 		"logs/kraken2-build/kraken_db.log"
 	threads: 20
@@ -14,13 +16,26 @@ rule kraken_build:
 	shell:
 		"kraken2-build --download-taxonomy --skip-maps --db {output.db} &&" #only required to download test database
 		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --build --db {output.db} --threads {threads} &&"
-		"kraken2-build --clean --db {output.db} &&"
-		"bracken-build -d {output.db} -l {params.read_len} && touch {output.mock}"
+		"kraken2-build --clean --db {output.db} && touch {output.mock1}"
+
+rule bracken_build:
+        output:
+                db = directory("results/kraken2-db"),
+		mock2 = "results/kraken2-db/mock2.txt"
+        log:
+                "logs/bracken-build/bracken_build.log"
+        params:
+                read_len = 100
+        conda:
+                "../envs/kraken2.yaml"
+        shell:
+                "bracken-build -d {output.db} -l {params.read_len} && touch {output.mock2}"
+
 		
 rule kraken2:
 	input:
 		fq = get_fastq_input,
-		db = "resources/kraken2-db",
+		db = "results/kraken2-db",
 	output:
 		rep = "results/kraken2/{sample}/evol1_{sample}_{unit}",
 		kraken = "results/kraken2/{sample}/evol1_{sample}_{unit}.kraken"
@@ -35,7 +50,7 @@ rule kraken2:
 
 rule bracken:
 	input:
-		db = "resources/kraken2-db",
+		db = "results/kraken2-db",
 		rep = "results/kraken2/{sample}/evol1_{sample}_{unit}"
 	output:
 		bracken = "results/bracken/{sample}/evol1_{sample}_{unit}.bracken"

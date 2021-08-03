@@ -2,7 +2,7 @@
 rule kraken2_build:
 	output:
 		db = directory("results/kraken2-db"),
-                mock1 = "results/kraken2-db/mock1.txt"
+                mock = "results/kraken2-db/mock.txt"
 	log:
 		"logs/kraken2-build/kraken_db.log"
 	threads: 20
@@ -11,28 +11,13 @@ rule kraken2_build:
                 dbtype = config["dbtype"]
 	conda:
 		"../envs/kraken2.yaml"
-	priority: 2
+	priority: 1
 	cache: True
 	shell:
-		"kraken2-build --download-taxonomy --skip-maps --db {output.db} &&" #only required to download test database
-		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --build --db {output.db} --threads {threads} &&"
-		"touch {output.mock1}"
-		#kraken2-build --clean --db {output.db}
-
-rule bracken_build:
-        output:
-                db = directory("results/kraken2-db"),
-		mock2 = "results/kraken2-db/mock2.txt"
-        log:
-                "logs/bracken-build/bracken_build.log"
-        params:
-                read_len = 100
-        conda:
-                "../envs/bracken.yaml"
-	priority: 1
-        shell:
-                "bracken-build -d {output.db} -l {params.read_len} && touch {output.mock2}"
-
+		"kraken2-build --download-taxonomy --skip-maps --db {output.db} && " #only required to download test database
+		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --build --db {output.db} --threads {threads} && "
+		"bracken-build -d {output.db} && touch {output.mock}"
+		#kraken2-build --clean --db {output.db
 		
 rule kraken2:
 	input:

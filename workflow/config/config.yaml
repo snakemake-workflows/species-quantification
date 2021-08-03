@@ -6,6 +6,9 @@ units: config/units.tsv
 #kraken db
 dbtype: "--standard"
 
+#sourmash db
+sourmash_lca_link: "https://osf.io/hm3c4/download"
+sourmash_lca_name: "gtdb-rs202.genomic.k21.lca.json"
 
 ###For benchmarking
 benchmarking: True

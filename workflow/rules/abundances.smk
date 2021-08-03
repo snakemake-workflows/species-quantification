@@ -50,16 +50,16 @@ rule bracken:
 		"bracken -d {input.db} -i {input.rep} -l S -o {output} 2> {log}"		
 
 rule sourmash_lca_db:
-	params:
-		link = config["sourmash_lca_link"],
-                name = config["sourmash_lca_name"]
 	output:
 		expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name"])
+	params:
+                name = config["sourmash_lca_name"],
+                link = config["sourmash_lca_link"]
 	priority: 1
 	log:
 		"logs/sourmash_lca_db/wget.log"
 	shell:
-		"mkdir results/sourmash_lca_db && cd results/sourmash_lca_db && wget {params.link} && tar -xzvf {params.name}.gz"
+		"cd results/sourmash_lca_db && wget {params.link} -O {params.name}.gz && tar -xzvf {params.name}.gz"
 
 rule sourmash_comp:
 	input:

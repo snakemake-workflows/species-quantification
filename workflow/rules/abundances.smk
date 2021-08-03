@@ -28,7 +28,7 @@ rule bracken_build:
         params:
                 read_len = 100
         conda:
-                "../envs/kraken2.yaml"
+                "../envs/bracken.yaml"
 	priority: 1
         shell:
                 "bracken-build -d {output.db} -l {params.read_len} && touch {output.mock2}"

@@ -59,7 +59,7 @@ rule sourmash_lca_db:
 	log:
 		"logs/sourmash_lca_db/wget.log"
 	shell:
-		"cd results/sourmash_lca_db && wget {params.link} -O {params.name}.gz && tar -xzvf {params.name}.gz"
+		"cd results/sourmash_lca_db && wget {params.link} -O {params.name}.gz && gunzip {params.name}.gz"
 
 rule sourmash_comp:
 	input:

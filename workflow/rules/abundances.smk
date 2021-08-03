@@ -11,7 +11,7 @@ rule kraken2_build:
                 dbtype = config["dbtype"]
 	conda:
 		"../envs/kraken2.yaml"
-	priority: 1
+	priority: 2
 	cache: True
 	shell:
 		"kraken2-build --download-taxonomy --skip-maps --db {output.db} && " #only required to download test database
@@ -48,7 +48,19 @@ rule bracken:
 		"../envs/kraken2.yaml"
 	shell: 
 		"bracken -d {input.db} -i {input.rep} -l S -o {output} 2> {log}"		
- 
+
+rule sourmash_lca_db:
+	params:
+		link = config["sourmash_lca_link"],
+                name = config["sourmash_lca_name"]
+	output:
+		expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name"])
+	priority: 1
+	log:
+		"logs/sourmash_lca_db/wget.log"
+	shell:
+		"mkdir results/sourmash_lca_db && cd results/sourmash_lca_db && wget {params.link} && tar -xzvf {params.name}.gz"
+
 rule sourmash_comp:
 	input:
 		get_fastq_input,
@@ -64,7 +76,7 @@ rule sourmash_comp:
 rule sourmash_lca:
 	input:
 		sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k21.sig",
-		db = "resources/sourmash/genbank-k21.lca.json"
+		db = expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name"]),
 	output:
 		sum = "results/sourmash/lca-class/{sample}/{sample}_{unit}_k21.csv"
 	log:

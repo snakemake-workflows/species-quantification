@@ -1,4 +1,3 @@
-ruleorder: kraken2_build > bracken_build
 
 rule kraken2_build:
 	output:
@@ -12,11 +11,13 @@ rule kraken2_build:
                 dbtype = config["dbtype"]
 	conda:
 		"../envs/kraken2.yaml"
+	priority: 2
 	cache: True
 	shell:
 		"kraken2-build --download-taxonomy --skip-maps --db {output.db} &&" #only required to download test database
 		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --build --db {output.db} --threads {threads} &&"
-		"kraken2-build --clean --db {output.db} && touch {output.mock1}"
+		"touch {output.mock1}"
+		#kraken2-build --clean --db {output.db}
 
 rule bracken_build:
         output:
@@ -28,6 +29,7 @@ rule bracken_build:
                 read_len = 100
         conda:
                 "../envs/kraken2.yaml"
+	priority: 1
         shell:
                 "bracken-build -d {output.db} -l {params.read_len} && touch {output.mock2}"
 

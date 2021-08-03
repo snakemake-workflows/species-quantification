@@ -1,7 +1,6 @@
-name: kraken2
+name: bracken
 channels:
    - bioconda
    - conda-forge
 dependencies:
-   - kraken2
-   - rsync
+   - bracken

@@ -2,6 +2,6 @@ name: sourmash
 channels: 
    - bioconda
 dependencies:
-   - sourmash
+   - sourmash=3.5.1
 
  

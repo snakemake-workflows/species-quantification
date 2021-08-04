@@ -1,15 +1,0 @@
-[K
-== This is sourmash version 3.5.1. ==
-[K== Please cite Brown and Irber (2016), doi:10.21105/joss.00027. ==
-
-[K** WARNING: the sourmash compute command is DEPRECATED as of 4.0 and
-** will be removed in 5.0. Please see the 'sourmash sketch' command instead.
-
-[Ksetting num_hashes to 0 because --scaled is set
-[Kcomputing signatures for files: data/reads/test_ont.fastq
-[KComputing signature for ksizes: [21]
-[KComputing only nucleotide (and not protein) signatures.
-[KComputing a total of 1 signature(s).
-[K... reading sequences from data/reads/test_ont.fastq
-[K...data/reads/test_ont.fastq 499 sequences[Kcalculated 1 signatures for 500 sequences in data/reads/test_ont.fastq
-[Ksaved signature(s) to results/sourmash/sig/test_ont/test_ont_unit1_k21.sig. Note: signature license is CC0.

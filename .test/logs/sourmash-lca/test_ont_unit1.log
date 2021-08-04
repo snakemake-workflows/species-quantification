@@ -1,18 +1,0 @@
-[K
-== This is sourmash version 3.5.1. ==
-[K== Please cite Brown and Irber (2016), doi:10.21105/joss.00027. ==
-
-[K[K[K... loading database resources/sourmash/genbank-k21.lca.jsonTraceback (most recent call last):
-  File "/home/uzuner/miniconda3/bin/sourmash", line 11, in <module>
-    sys.exit(main())
-  File "/home/uzuner/miniconda3/lib/python3.8/site-packages/sourmash/__main__.py", line 13, in main
-    return mainmethod(args)
-  File "/home/uzuner/miniconda3/lib/python3.8/site-packages/sourmash/cli/lca/summarize.py", line 36, in main
-    return sourmash.lca.command_summarize.summarize_main(args)
-  File "/home/uzuner/miniconda3/lib/python3.8/site-packages/sourmash/lca/command_summarize.py", line 175, in summarize_main
-    dblist, ksize, scaled = lca_utils.load_databases(args.db, args.scaled)
-  File "/home/uzuner/miniconda3/lib/python3.8/site-packages/sourmash/lca/lca_db.py", line 544, in load_databases
-    lca_db = LCA_Database.load(db_name)
-  File "/home/uzuner/miniconda3/lib/python3.8/site-packages/sourmash/lca/lca_db.py", line 204, in load
-    raise ValueError("cannot parse database file '{}' as JSON; invalid format.")
-ValueError: cannot parse database file '{}' as JSON; invalid format.

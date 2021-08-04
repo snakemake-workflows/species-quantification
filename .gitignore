@@ -7,3 +7,4 @@ workflow/data
 .snakemake
 workflow/scripts/abundance_estimation.py
 .test/logs
+.test/results

@@ -7,8 +7,8 @@ units: config/units.tsv
 dbtype: "--download-library protozoa"
 
 #sourmash db
-sourmash_lca_link: "https://osf.io/hm3c4/download"
-sourmash_lca_name: "gtdb-rs202.genomic.k21.lca.json"
+sourmash_lca_link: "https://osf.io/gk2za/download"
+sourmash_lca_name: "gtdb-rs202.genomic-reps.k21.lca.json"
 
 ##For benchmarking
 benchmarking: false

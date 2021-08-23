@@ -35,7 +35,8 @@ rule art_sim_bac:
     input:
         get_bacteria_input,
     output:
-        ["results/art/bac/{bac_ref}_1.fq", "results/art/bac/{bac_ref}_2.fq"]
+        "results/art/bac/{bac_ref}_1.fq",
+	"results/art/bac/{bac_ref}_2.fq"
     log:
         "logs/art/bac/{bac_ref}.log",
     threads: 2
@@ -45,7 +46,7 @@ rule art_sim_bac:
         length=config["short_read_len"],
         f_cov=config["fold_coverage"],
     shell:
-        "art_illumina -ss HS25 -i {input} -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o results/art/bac/{wildcards.bac_ref} --noALN 2> {log}"
+        "art_illumina -ss HS25 -i {input} -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o results/art/bac/{wildcards.bac_ref}_ --noALN 2> {log}"
 
 rule nanosim_hs:
     input:
@@ -77,11 +78,13 @@ rule nanosim_bac_train:
     log:
         "logs/nanosim_train/ecoli_train.log",
     threads: 30
+    params:
+        model_fit = config["model_fit"]
     conda:	
         "../envs/nanosim.yaml"
     shell:
         "read_analysis.py genome -i {input.read} -rg {input.r} --num_threads {threads}"
-        " -o results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2 2> {log}"
+        " -o results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2 {params.model_fit} 2> {log}"
 
 
 rule nanosim_bac_sim:
@@ -186,7 +189,7 @@ rule kraken2_build_bench:
                 dbtype = config["dbtype"]
 	conda:
 		"../envs/kraken2.yaml"
-	priority: 3
+	priority: 1
 	cache: True
 	shell:
 		"kraken2-build --download-taxonomy --skip-maps --db {output.db} && " #only required to download test database
@@ -231,9 +234,8 @@ rule sourmash_lca_db_k21_bench:
 	params:
                 name = config["sourmash_lca_name_k21"],
                 link = config["sourmash_lca_link_k21"]
-	priority: 2
 	log:
-		"logs/sourmash_lca_db/wget.log"
+		"logs/sourmash_lca_db/wget_k21.log"
 	shell:
 		"cd results/sourmash_lca_db && wget {params.link} -O {params.name}.gz && gunzip {params.name}.gz"
 
@@ -243,9 +245,8 @@ rule sourmash_lca_db_k51_bench:
 	params:
                 name = config["sourmash_lca_name_k51"],
                 link = config["sourmash_lca_link_k51"]
-	priority: 1
 	log:
-		"logs/sourmash_lca_db/wget.log"
+		"logs/sourmash_lca_db/wget_k51.log"
 	shell:
 		"cd results/sourmash_lca_db && wget {params.link} -O {params.name}.gz && gunzip {params.name}.gz"
 
@@ -267,7 +268,7 @@ rule sourmash_comp_sr:
 rule sourmash_lca_sr:
 	input:
 		sig = "results/sourmash/sr/sig/Scaled_{s}_mixed_sample{n}_{p}_k51_R{e}.sig",
-		db = "results/sourmash_lca_db/gtdb-rs202.genomic.k51.lca.json"
+		db = expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name_k51"])
 	output:
 		sum = "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv"
 	log:
@@ -325,7 +326,7 @@ rule sourmash_comp_lr:
 rule sourmash_lca_lr:
 	input:
 		sig = "results/sourmash/lr/sig/Scaled_{s}_mixed_sample{n}_{p}_k21.sig",
-		db = "results/sourmash_lca_db/gtdb-rs202.genomic.k21.lca.json" 
+		db = expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name_k21"])
 	output:
 		sum = "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv"
 	log:
@@ -336,40 +337,6 @@ rule sourmash_lca_lr:
 		"sourmash lca summarize --query {input.sig} --db {input.db} -o {output} 2> {log}"
 
 rule compare_results_sr:
-<<<<<<< HEAD
-    input:
-	sourmash = expand("results/sourmash/sr/lca-class/Scaled_2000_mixed_sample{n}_{p}_R1.csv",
-	n = range(1, config["number_of_samples"] + 1),
-        p =  config["p"]),
-        kraken2 = expand("results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}",
-        n = range(1, config["number_of_samples"] + 1),
-        p =  config["p"]),
-        bracken = expand("results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken",
-        n = range(1, config["number_of_samples"] + 1),
-        p = config["p"])
-    output:
-        "results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples_coord_fixed.pdf",
-        "results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples.csv"
-    script:
-        "../scripts/sr_abundance_plot.R"
-
-rule compare_results_lr:
-    input:
-        sourmash = expand("results/sourmash/lr/lca-class/Scaled_2000_mixed_sample{n}_{p}_k21.csv",
-        n = range(1, config["number_of_samples"] + 1),
-        p =  config["p"]),
-        kraken2 = expand("results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}",
-        n = range(1, config["number_of_samples"] + 1),
-        p =  config["p"]),
-        bracken = expand("results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken",
-        n = range(1, config["number_of_samples"] + 1),
-        p = config["p"])
-    output:
-        "results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples_coord_fixed.pdf",
-        "results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples.csv"
-    script:
-        "../scripts/lr_abundance_plot.R"
-=======
 	input:
 		sourmash = expand("results/sourmash/sr/lca-class/Scaled_2000_mixed_sample{n}_{p}_R1.csv", n = range(1, config["number_of_samples"] + 1), p =  config["p"]),
 		kraken2 = expand("results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}", n = range(1, config["number_of_samples"] + 1), p =  config["p"]),
@@ -398,4 +365,3 @@ rule compare_results_lr:
 		"../envs/ggplot2.yaml"
 	script:
 		"../scripts/lr_abundance_plot.R"
->>>>>>> modifications

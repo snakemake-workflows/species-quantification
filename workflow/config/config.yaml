@@ -4,7 +4,8 @@ samples: config/samples.tsv
 units: config/units.tsv
 
 #kraken db
-dbtype: "--standard"
+#dbtype: "--standard"
+dbtype: "--download-library protozoa" #for testing purposes only
 
 #sourmash db_k21
 sourmash_lca_link_k21: "https://osf.io/hm3c4/download"
@@ -35,7 +36,7 @@ long_nreads: 50000
 med_long_read_len:
 min_long_read_len: 300
 max_long_read_len: 1000
-
+model_fit: "" #should not be blank for test config, but should be blank here.
 #info about e_coli read: check: info.txt
 
 #additional

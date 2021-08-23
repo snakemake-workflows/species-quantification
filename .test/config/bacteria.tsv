@@ -1,9 +1,9 @@
 bacteria	fasta
-GCF_000006765.1_ASM676v1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/GCF_000006765.1_ASM676v1_genomic.fna
-GCF_000006945.2_ASM694v2	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/GCF_000006945.2_ASM694v2_genomic.fna
-GCF_000008565.1_ASM856v1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/GCF_000008565.1_ASM856v1_genomic.fna
-GCF_000010365.1_ASM1036v1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/GCF_000010365.1_ASM1036v1_genomic.fna
-GCF_000012685.1_ASM1268v1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/GCF_000012685.1_ASM1268v1_genomic.fna
-GCF_000222975.1_ASM22297v1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/GCF_000222975.1_ASM22297v1_genomic.fna
-merged_GCF_000622225.1_ASM62222v1	/vol/compute/hamdiyes_project/Tumor-microbiome-calling/workflow/data/bac_refs/merged_GCF_000622225.1_ASM62222v1_genomic.fna
+GCF_000006765.1_ASM676v1	data/bac_refs/GCF_000006765.1_ASM676v1_genomic.fna
+GCF_000006945.2_ASM694v2	data/bac_refs/GCF_000006945.2_ASM694v2_genomic.fna
+GCF_000008565.1_ASM856v1	data/bac_refs/GCF_000008565.1_ASM856v1_genomic.fna
+GCF_000010365.1_ASM1036v1	data/bac_refs/GCF_000010365.1_ASM1036v1_genomic.fna
+GCF_000012685.1_ASM1268v1	data/bac_refs/GCF_000012685.1_ASM1268v1_genomic.fna
+GCF_000222975.1_ASM22297v1	data/bac_refs/GCF_000222975.1_ASM22297v1_genomic.fna
+merged_GCF_000622225.1_ASM62222v1	data/bac_refs/merged_GCF_000622225.1_ASM62222v1_genomic.fna
 

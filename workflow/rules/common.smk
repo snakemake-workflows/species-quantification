@@ -1,7 +1,5 @@
 import pandas as pd
 
-configfile: "config/config.yaml"
-
 #read sample sheet
 samples = pd.read_csv(config["samples"], sep ="\t")
 units = pd.read_csv(config["units"], sep ="\t", ).set_index(["sample_name", "unit_name"], drop=False)

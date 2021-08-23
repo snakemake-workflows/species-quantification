@@ -6,9 +6,13 @@ units: config/units.tsv
 #kraken db
 dbtype: "--standard"
 
-#sourmash db
-sourmash_lca_link: "https://osf.io/hm3c4/download"
-sourmash_lca_name: "gtdb-rs202.genomic.k21.lca.json"
+#sourmash db_k21
+sourmash_lca_link_k21: "https://osf.io/hm3c4/download"
+sourmash_lca_name_k21: "gtdb-rs202.genomic.k21.lca.json"
+
+#sourmash db_k51
+sourmash_lca_link_k51: "https://osf.io/3cdp6/download"
+sourmash_lca_name_k51: "gtdb-rs202.genomic.k51.lca.json"
 
 ###For benchmarking
 benchmarking: True
@@ -17,7 +21,7 @@ benchmarking: True
 number_of_samples: 1
 
 #Reference genomes 
-bacteria: "config/bacteria.tsv"
+bacteria: config/bacteria.tsv
 
 #number of reads to be fractionated
 p: [1000, 5000, 10000, 15000]
@@ -31,9 +35,6 @@ long_nreads: 50000
 med_long_read_len:
 min_long_read_len: 300
 max_long_read_len: 1000
-
-#long read simulation resource files
-hum_pro: resources/human_NA12878_DNA_FAB49712_guppy #ready to use error profile for human
 
 #info about e_coli read: check: info.txt
 

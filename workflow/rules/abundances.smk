@@ -49,40 +49,66 @@ rule bracken:
 	shell: 
 		"bracken -d {input.db} -i {input.rep} -l S -o {output} 2> {log}"		
 
-rule sourmash_lca_db:
+rule sourmash_lca_db_k21:
 	output:
-		expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name"])
+		expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name_k21"])
 	params:
-                name = config["sourmash_lca_name"],
-                link = config["sourmash_lca_link"]
+                name = config["sourmash_lca_name_k21"],
+                link = config["sourmash_lca_link_k21"]
 	priority: 1
 	log:
 		"logs/sourmash_lca_db/wget.log"
 	shell:
 		"cd results/sourmash_lca_db && wget {params.link} -O {params.name}.gz && gunzip {params.name}.gz"
 
-rule sourmash_comp:
+rule sourmash_comp_k21:
 	input:
 		get_fastq_input,
 	output:
 		sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k21.sig"
 	log:
-		"logs/sourmash-compute/{sample}_{unit}.log"
+		"logs/sourmash-compute-k21/{sample}_{unit}.log"
 	conda:
 		"../envs/sourmash.yaml"
 	shell:
 		"sourmash compute --scaled 2000 {input} -o {output} -k=21 2> {log}"
 
-rule sourmash_lca:
+rule sourmash_lca_k21:
 	input:
 		sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k21.sig",
-		db = expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name"]),
+		db = expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name_k21"]),
 	output:
 		sum = "results/sourmash/lca-class/{sample}/{sample}_{unit}_k21.csv"
 	log:
-		"logs/sourmash-lca/{sample}_{unit}.log"
+		"logs/sourmash-lca-k21/{sample}_{unit}.log"
 	conda:
 		"../envs/sourmash.yaml"
 	shell:
 		"sourmash lca summarize --query {input.sig} --db {input.db} -o {output} 2> {log}"
+
+rule sourmash_comp_k51:
+        input:
+                get_fastq_input,
+        output:
+                sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k51.sig"
+        log:
+                "logs/sourmash-compute-k51/{sample}_{unit}.log"
+        conda:
+                "../envs/sourmash.yaml"
+        shell:
+                "sourmash compute --scaled 2000 {input} -o {output} -k=51 2> {log}"
+
+rule sourmash_lca_k51:
+        input:
+                sig = "results/sourmash/sig/{sample}/{sample}_{unit}_k51.sig",
+                db = expand("results/sourmash_lca_db/{db}", db = config["sourmash_lca_name_k51"]),
+        output:
+                sum = "results/sourmash/lca-class/{sample}/{sample}_{unit}_k51.csv"
+        log:
+                "logs/sourmash-lca-k51/{sample}_{unit}.log"
+        conda:
+                "../envs/sourmash.yaml"
+        shell:
+                "sourmash lca summarize --query {input.sig} --db {input.db} -o {output} 2> {log}"
+
 

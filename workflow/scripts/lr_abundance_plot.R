@@ -1,22 +1,26 @@
 library(ggplot2)
 
-#this script creates an abundance plot for all samples and compares existing methods.
+#this script creates an abundance plot for all samples and compares 3 quantification methods; sourmash, kraken2, bracken.
 #the species to look for:
-#removed "Candidatus Carsonella ruddii"
 
-sp <- c("Yersinia pestis",
-        "Myxococcus xanthus",
-        "Deinococcus radiodurans",
-        "Salmonella enterica",
-        "Pseudomonas aeruginosa",
-        "Roseomonas mucosa")
+# sp <- c("Yersinia pestis",
+#         "Myxococcus xanthus",
+#         "Deinococcus radiodurans",
+#         "Salmonella enterica",
+#         "Pseudomonas aeruginosa",
+#         "Roseomonas mucosa")
+
+sp <- snakemake@params[["species"]]
+number_of_reads <- snakemake@params[["total_reads"]]
 
 #sourmash#
 
 fin.s <- data.frame()
 for (i in snakemake@input[["sourmash"]]){
+  
   #read and match the genera
   sour <- read.csv(i)
+  substr(sour$species,start = 4, stop = 1000000L)
   sel.sour <- sour[sour$species %in% sp,]
   sel.sour <- sel.sour[!duplicated(sel.sour[,"species"]),]
   sour.df <- sel.sour[,c("count", "species")]
@@ -32,17 +36,13 @@ for (i in snakemake@input[["sourmash"]]){
     sour.fin$method <- "sourmash_k21"
   }
   
-  #calculate observed and real fractions
+  #match the total number of reads with samples
+  total_n <- setNames(number_of_reads, snakemake@input[["sourmash"]]) #suspicous, if matched or not?
   
-  total_n <- setNames(c(51925, 79925, 114925, 149925),
-                      c("results/sourmash/lr/lca-class/Scaled_2000_mixed_sample1_1000_k21.csv",
-                        "results/sourmash/lr/lca-class/Scaled_2000_mixed_sample1_5000_k21.csv",
-                        "results/sourmash/lr/lca-class/Scaled_2000_mixed_sample1_10000_k21.csv",
-                        "results/sourmash/lr/lca-class/Scaled_2000_mixed_sample1_15000_k21.csv"))
   #calculate observed fraction
   sour.fin$o_fraction <- sour.fin$count/total_n[i]
-  
-  #calculate real fraction
+
+    #calculate real fraction
   r_fraction <- unlist(strsplit(i, split = "_"))[5] 
   
   #divide the total n reads by the fraction
@@ -50,6 +50,7 @@ for (i in snakemake@input[["sourmash"]]){
   
   #add sample names
   sour.fin$sample <- unlist(strsplit(i, split = "_"))[5]
+  sour.fin$sample <- paste0("fraction", sour.fin$sample)
   
   #have the final table for sourmash
   fin.s <- rbind(fin.s, sour.fin)
@@ -59,28 +60,32 @@ for (i in snakemake@input[["sourmash"]]){
 
 fin.k <- data.frame()
 for (j in snakemake@input[["kraken2"]]){
-  print(j)
-  
-  #read and match the genera
+ 
+   #read and match the genera
   kra <- read.table(j, header = F, sep = "\t", strip.white = T)
   kra.s <- kra[kra$V4 == "S",]
-  sel.kra <- kra.s[kra.s$V6 %in% sp,] #v2 is the count
-  kra.fin <- sel.kra[,c("V2", "V6")]
-  colnames(kra.fin) <- c("count", "species")
-  kra.fin$method <- "kraken2"
   
-  #all inserted genera have hits for kraken2, no need to take care of NAs.
+  sel.kra <- kra.s[kra.s$V6 %in% sp,]#v2 is the count
+  kra.df <- sel.kra[,c("V2", "V6")]
+  colnames(kra.df) <- c("count", "species")
+
+  #if the genus doesn't have a hit, get rid of NAs
+  if (any(!sp %in% kra.df$species)) {
+    add <- data.frame("count" = 0,
+                        species = sp[!sp %in% kra.df$species])
+    kra.fin <- rbind(kra.df, add)
+    kra.fin$method <- "kraken2"
+  } else {
+    kra.fin <- kra.df
+    kra.fin$method <- "kraken2"
+  }
   
-  #BU KISMI SOR!
-  total_n <- setNames(c(51925, 79925, 114925, 149925),
-                      c("results/kraken2/lr/sb/evol1_Sample1_fraction1000",
-                        "results/kraken2/lr/sb/evol1_Sample1_fraction5000",
-                        "results/kraken2/lr/sb/evol1_Sample1_fraction10000",
-                        "results/kraken2/lr/sb/evol1_Sample1_fraction15000"))
+  #match the total number of reads with samples
+  total_n <- setNames(number_of_reads, snakemake@input[["kraken2"]])
   
   #calculate the observed fraction
   kra.fin$o_fraction <- kra.fin$count/total_n[j]
-  
+
   #calculate the real fraction
   tmp <- unlist(strsplit(j, split = "_"))[3] 
   r_fraction <- unlist(strsplit(tmp, split = "fraction"))[2]
@@ -99,25 +104,30 @@ for (j in snakemake@input[["kraken2"]]){
 
 fin.b <- data.frame()
 for (k in snakemake@input[["bracken"]]){
+  
   #read and match the genera
   bra <- read.table(k, header = T, sep = "\t", strip.white = T)
   sel.bra <- bra[bra[,"name"] %in% sp,] 
-  bra.fin <- sel.bra[,c("name", "new_est_reads")]
-  colnames(bra.fin) <- c("species", "count")
-  bra.fin$method <- "bracken"
+  bra.df <- sel.bra[,c("name", "new_est_reads")]
+  colnames(bra.df) <- c("species", "count")
   
-  #all inserted genera have hits for bracken, no need to take care of NAs.
+  #if the genus doesn't have a hit, get rid of NAs
+  if (any(!sp %in% bra.df$species)) {
+    add <- data.frame("count" = 0,
+                      species = sp[!sp %in% bra.df$species])
+    bra.fin <- rbind(bra.df, add)
+    bra.fin$method <- "bracken"
+  } else {
+    bra.fin <- bra.df
+    bra.fin$method <- "bracken"
+  }
   
-  #BU KISMI SOR!
-  total_n <- setNames(c(51925, 79925, 114925, 149925),
-                      c("results/bracken/lr/sb/evol1_Sample1_fraction1000.bracken",
-                        "results/bracken/lr/sb/evol1_Sample1_fraction5000.bracken",
-                        "results/bracken/lr/sb/evol1_Sample1_fraction10000.bracken",
-                        "results/bracken/lr/sb/evol1_Sample1_fraction15000.bracken"))
+  #match the total number of reads with samples
+  total_n <- setNames(number_of_reads, snakemake@input[["bracken"]])
   
   #calculate the observed fraction
   bra.fin$o_fraction <- bra.fin$count/total_n[k]
-  
+
   #calculate the real fraction
   tmp <- unlist(strsplit(k, split = "_"))[3] 
   r_fraction <- unlist(strsplit(tmp, split = "fraction"))[2]
@@ -134,16 +144,14 @@ for (k in snakemake@input[["bracken"]]){
   fin.b$sample <- gsub( ".bracken", "", fin.b$sample)
 }  
 
-
 #final table
 fin <- rbind(fin.s, fin.k)
 fin <- rbind(fin, fin.b)
 
 #modify sample names
-fin$sample[1:24] <- paste0("fraction", fin$sample)
 fin$sample_f <- factor(fin$sample, levels=c("fraction1000", "fraction5000", "fraction10000", "fraction15000"))
 
-print(fin)
+print("checkpoint")
 #scatter plot 
 p <- ggplot(fin, aes(x=r_fraction, y=o_fraction, shape=species, color=species))+
   geom_point()+

@@ -24,7 +24,7 @@ number_of_samples: 1
 bacteria: config/bacteria.tsv
 
 #number of reads to be fractionated
-p: [1000, 5000, 10000, 15000]
+p: [1000, 5000]
 
 #parameters for short read simulation (fold_coverage required for art settings)
 short_read_len: 150

@@ -345,7 +345,7 @@ rule compare_results_sr:
 		"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples_coord_fixed.pdf",
 		"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples.csv"
 	log:
-		"logs/compare/sr/log.txt"
+		"logs/compare/sr/plot_log.txt"
 	conda:
 		"../envs/ggplot2.yaml"
 	script:
@@ -360,8 +360,11 @@ rule compare_results_lr:
 		"results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples_coord_fixed.pdf",
 		"results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples.csv"
 	log:
-		"logs/compare/lr/log.txt"
+		"logs/compare/lr/plot_log.txt"
 	conda:
 		"../envs/ggplot2.yaml"
+	params:
+		species = bacteria.bacterium_name,
+		total_reads = [x*len(bacteria) + config["long_nreads"] for x in config["p"]]
 	script:
 		"../scripts/lr_abundance_plot.R"

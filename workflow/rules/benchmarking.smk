@@ -78,13 +78,11 @@ rule nanosim_bac_train:
     log:
         "logs/nanosim_train/ecoli_train.log",
     threads: 30
-    params:
-        model_fit = config["model_fit"]
     conda:	
         "../envs/nanosim.yaml"
     shell:
         "read_analysis.py genome -i {input.read} -rg {input.r} --num_threads {threads}"
-        " -o results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2 {params.model_fit} 2> {log}"
+        " -o results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2 2> {log}"
 
 
 rule nanosim_bac_sim:
@@ -340,7 +338,8 @@ rule compare_results_sr:
 	input:
 		sourmash = expand("results/sourmash/sr/lca-class/Scaled_2000_mixed_sample{n}_{p}_R1.csv", n = range(1, config["number_of_samples"] + 1), p =  config["p"]),
 		kraken2 = expand("results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}", n = range(1, config["number_of_samples"] + 1), p =  config["p"]),
-		bracken = expand("results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken", n = range(1, config["number_of_samples"] + 1), p = config["p"])
+		bracken = expand("results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken", n = range(1, config["number_of_samples"] + 1), p = config["p"]),
+		fq = expand("results/mixed_sr/mixed_{p}_Sample{n}_1.fastq", n = range(1, config["number_of_samples"] + 1), p = config["p"])
 	output:
 		"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples_coord_fixed.pdf",
 		"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples.csv"
@@ -348,6 +347,8 @@ rule compare_results_sr:
 		"logs/compare/sr/plot_log.txt"
 	conda:
 		"../envs/ggplot2.yaml"
+	params:
+		species = bacteria.bacterium_name
 	script:
 		"../scripts/sr_abundance_plot.R"
 

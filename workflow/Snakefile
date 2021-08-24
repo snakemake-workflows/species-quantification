@@ -2,74 +2,80 @@ from snakemake.utils import min_version
 
 min_version("5.32.2")
 
+
 configfile: "config/config.yaml"
+
 
 container: "docker://continuumio/miniconda3"
 
+
 include: "rules/common.smk"
+
 
 if config["benchmarking"] == False:
 
-   include: "rules/abundances.smk"
+    include: "rules/abundances.smk"
 
-   rule all:
-      input:
-          "results/kraken2-db/mock.txt",
-          expand(
-          "results/bracken/{unit.sample_name}/evol1_{unit.sample_name}_{unit.unit_name}.bracken",
-          unit=units.itertuples(),
-          ),
-          expand(
-          "results/sourmash/lca-class/{unit.sample_name}/{unit.sample_name}_{unit.unit_name}_k21.csv",
-          unit=units.itertuples(),
-          ),
+    rule all:
+        input:
+            "results/kraken2-db/mock.txt",
+            expand(
+                "results/bracken/{unit.sample_name}/evol1_{unit.sample_name}_{unit.unit_name}.bracken",
+                unit=units.itertuples(),
+            ),
+            expand(
+                "results/sourmash/lca-class/{unit.sample_name}/{unit.sample_name}_{unit.unit_name}_k21.csv",
+                unit=units.itertuples(),
+            ),
+
+
 if config["benchmarking"] == True:
 
-   include: "rules/benchmarking.smk"
+    include: "rules/benchmarking.smk"
 
-   rule all:
-      input:
-          expand(
-          "results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2_aligned_reads.pkl"
-          ),
-          expand(
-          "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken",
-          n=range(1, config["number_of_samples"] + 1),
-          p=config["p"],
-          ),
-          expand(
-          "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken",
-          n=range(1, config["number_of_samples"] + 1),
-          p=config["p"],
-          ),
-          expand(
-          "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken",
-          n=range(1, config["number_of_samples"] + 1),
-          p=config["p"],
-          ),
-          expand(
-          "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken",
-          n=range(1, config["number_of_samples"] + 1),
-          p=config["p"],
-          ),
-          expand(
-          "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv",
-          s=config["sourmash_scale"],
-          n=range(1, config["number_of_samples"] + 1),
-          p=config["p"],
-          e={1, 2},
-          ),
-          expand(
-          "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv",
-          s=config["sourmash_scale"],
-          n=range(1, config["number_of_samples"] + 1),
-          p=config["p"],
-          ),
-          expand(
-          "results/final_abundance/scatter_plot/{read_type}/{read_type}_final_abundance_all_samples_coord_fixed.pdf",
-          read_type={"lr"},
-          ),
-          expand(
-          "results/final_abundance/scatter_plot/{read_type}/{read_type}_final_abundance_all_samples.csv",
-          read_type={"lr"},
-          ),
+    rule all:
+        input:
+            expand(
+                "results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2_aligned_reads.pkl"
+            ),
+            expand(
+                "results/kraken2/sr/sb/evol1_Sample{n}_fraction{p}.kraken",
+                n=range(1, config["number_of_samples"] + 1),
+                p=config["p"],
+            ),
+            expand(
+                "results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken",
+                n=range(1, config["number_of_samples"] + 1),
+                p=config["p"],
+            ),
+            expand(
+                "results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}.kraken",
+                n=range(1, config["number_of_samples"] + 1),
+                p=config["p"],
+            ),
+            expand(
+                "results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken",
+                n=range(1, config["number_of_samples"] + 1),
+                p=config["p"],
+            ),
+            expand(
+                "results/sourmash/sr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_R{e}.csv",
+                s=config["sourmash_scale"],
+                n=range(1, config["number_of_samples"] + 1),
+                p=config["p"],
+                e={1, 2},
+            ),
+            expand(
+                "results/sourmash/lr/lca-class/Scaled_{s}_mixed_sample{n}_{p}_k21.csv",
+                s=config["sourmash_scale"],
+                n=range(1, config["number_of_samples"] + 1),
+                p=config["p"],
+            ),
+            expand(
+                "results/final_abundance/scatter_plot/{read_type}/{read_type}_final_abundance_all_samples_coord_fixed.pdf",
+                read_type={"lr", "sr"},
+            ),
+            expand(
+                "results/final_abundance/scatter_plot/{read_type}/{read_type}_final_abundance_all_samples.csv",
+                read_type={"lr", "sr"},
+            ),

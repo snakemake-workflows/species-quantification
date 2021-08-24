@@ -1,4 +1,4 @@
-##For quantification
+###For quantification###
 #samples
 samples: config/samples.tsv
 units: config/units.tsv
@@ -14,7 +14,7 @@ sourmash_lca_name_k21: "gtdb-rs202.genomic.k21.lca.json"
 sourmash_lca_link_k51: "https://osf.io/297dp/download"
 sourmash_lca_name_k51: "gtdb-rs202.genomic.k51.lca.json"
 
-##For benchmarking
+###For benchmarking###
 benchmarking: True
 
 #Set the number of samples to be generated
@@ -26,19 +26,19 @@ bacteria: config/bacteria.tsv
 #number of reads to be fractionated
 p: [1000, 5000]
 
-#parameters for short read simulation (fold_coverage required for art settings)
+#Art: parameters for short read simulation (fold_coverage required for art settings)
 short_read_len: 150
 fold_coverage: 2
 
-#parameters for long read simulation (around 20000 reads)
+#Nanosim: parameters for long read simulation (around 20000 reads)
 long_nreads: 2000
 med_long_read_len:
 min_long_read_len: 300
 max_long_read_len: 1000
-model_fit: ""
 
-#additional
+#Sourmash
 sourmash_scale: 2000
+
 
 
 

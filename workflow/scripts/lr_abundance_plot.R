@@ -11,8 +11,16 @@ library(ggplot2)
 #         "Roseomonas mucosa")
 
 sp <- snakemake@params[["species"]]
-number_of_reads <- snakemake@params[["total_reads"]]
 
+#find the number of reads in samples
+number_of_reads <- c()
+t <- 1
+print(snakemake@input[["fq"]])
+for (n in snakemake@input[["fq"]]){ 
+  number_of_reads[t] <-  as.numeric(system(paste("echo $(cat", n ," |wc -l)/4|bc"), intern = TRUE))
+  t <- t+1
+}
+print(number_of_reads)
 #sourmash#
 
 fin.s <- data.frame()
@@ -20,7 +28,7 @@ for (i in snakemake@input[["sourmash"]]){
   
   #read and match the genera
   sour <- read.csv(i)
-  substr(sour$species,start = 4, stop = 1000000L)
+  sour$species <- substr(sour$species,start = 4, stop = 1000000L)
   sel.sour <- sour[sour$species %in% sp,]
   sel.sour <- sel.sour[!duplicated(sel.sour[,"species"]),]
   sour.df <- sel.sour[,c("count", "species")]
@@ -40,6 +48,7 @@ for (i in snakemake@input[["sourmash"]]){
   total_n <- setNames(number_of_reads, snakemake@input[["sourmash"]]) #suspicous, if matched or not?
   
   #calculate observed fraction
+  print(total_n[i])
   sour.fin$o_fraction <- sour.fin$count/total_n[i]
 
     #calculate real fraction

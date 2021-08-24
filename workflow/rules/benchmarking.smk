@@ -355,7 +355,8 @@ rule compare_results_lr:
 	input:
 		sourmash = expand("results/sourmash/lr/lca-class/Scaled_2000_mixed_sample{n}_{p}_k21.csv", n = range(1, config["number_of_samples"] + 1), p =  config["p"]),
 		kraken2 = expand("results/kraken2/lr/sb/evol1_Sample{n}_fraction{p}", n = range(1, config["number_of_samples"] + 1), p =  config["p"]),
-		bracken = expand("results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken", n = range(1, config["number_of_samples"] + 1), p = config["p"])
+		bracken = expand("results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken", n = range(1, config["number_of_samples"] + 1), p = config["p"]),
+		fq = expand("results/mixed_lr/mixed_{p}_Sample{n}.fastq", n = range(1, config["number_of_samples"] + 1), p = config["p"])
 	output:
 		"results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples_coord_fixed.pdf",
 		"results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples.csv"
@@ -364,7 +365,6 @@ rule compare_results_lr:
 	conda:
 		"../envs/ggplot2.yaml"
 	params:
-		species = bacteria.bacterium_name,
-		total_reads = [x*len(bacteria) + config["long_nreads"] for x in config["p"]]
+		species = bacteria.bacterium_name
 	script:
 		"../scripts/lr_abundance_plot.R"

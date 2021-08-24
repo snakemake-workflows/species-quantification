@@ -7,7 +7,6 @@ sp <- snakemake@params[["species"]]
 #find the number of reads in samples
 number_of_reads <- c()
 t <- 1
-print(snakemake@input[["fq"]])
 for (n in snakemake@input[["fq"]]){
   number_of_reads[t] <-  as.numeric(system(paste("echo $(cat", n ," |wc -l)/4|bc"), intern = TRUE))
   t <- t+1
@@ -151,7 +150,6 @@ fin <- rbind(fin, fin.b)
 #modify sample names
 fin$sample_f <- factor(fin$sample, levels=c("fraction1000", "fraction5000", "fraction10000", "fraction15000"))
 
-print("checkpoint")
 #scatter plot 
 p <- ggplot(fin, aes(x=r_fraction, y=o_fraction, shape=species, color=species))+
   geom_point()+

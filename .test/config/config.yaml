@@ -4,7 +4,7 @@ samples: config/samples.tsv
 units: config/units.tsv
 
 #kraken db
-dbtype: "--download-library protozoa"
+dbtype: "--download-library human"
 
 #sourmash db_k21
 sourmash_lca_link_k21: "https://osf.io/gk2za/download"
@@ -28,10 +28,10 @@ p: [1000, 5000]
 
 #Art: parameters for short read simulation (fold_coverage required for art settings)
 short_read_len: 150
-fold_coverage: 2
+n_reads_per_seq: 200 #could be configurable
 
 #Nanosim: parameters for long read simulation (around 20000 reads)
-long_nreads: 2000
+long_nreads: 500
 med_long_read_len:
 min_long_read_len: 300
 max_long_read_len: 1000

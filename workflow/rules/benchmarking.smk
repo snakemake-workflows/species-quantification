@@ -25,9 +25,9 @@ rule art_sim_hs:
         "../envs/art.yaml"
     params:
         length=config["short_read_len"],
-        f_cov=config["fold_coverage"],
+        n_reads_per_seq=config["n_reads_per_seq"],
     shell:
-        "art_illumina -ss HS25 -i results/refs/hs_genome.fasta -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o"
+        "art_illumina -ss HS25 -i results/refs/hs_genome.fasta -p -l {params.length} -c {params.n_reads_per_seq} -m 200 -s 10 -o"
         " results/art/hum/Sample{wildcards.art_hum} --noALN 2> {log}"
 
 
@@ -44,9 +44,9 @@ rule art_sim_bac:
         "../envs/art.yaml"
     params:
         length=config["short_read_len"],
-        f_cov=config["fold_coverage"],
+        n_reads_per_seq=config["n_reads_per_seq"],
     shell:
-        "art_illumina -ss HS25 -i {input} -p -l {params.length} -f {params.f_cov} -m 200 -s 10 -o results/art/bac/{wildcards.bac_ref}_ --noALN 2> {log}"
+        "art_illumina -ss HS25 -i {input} -p -l {params.length} -c {params.n_reads_per_seq} -m 200 -s 10 -o results/art/bac/{wildcards.bac_ref}_ --noALN 2> {log}"
 
 rule nanosim_hs:
     input:
@@ -62,11 +62,10 @@ rule nanosim_hs:
     conda:
         "../envs/nanosim.yaml"
     params:
-        med_len=config["med_long_read_len"],  #add -med for median length
-        nreads=config["long_nreads"],
+        long_nreads=config["long_nreads"],
     shell:
         "simulator.py genome -rg {input.ref} -c {input.model}/training -b guppy --num_threads {threads}"
-        " --fastq -o results/nanosim/hum/{wildcards.n} -n {params.nreads} 2> {log}"
+        " --fastq -o results/nanosim/hum/{wildcards.n} -n {params.long_nreads} 2> {log}"
 
 
 rule nanosim_bac_train:
@@ -99,11 +98,10 @@ rule nanosim_bac_sim:
     conda:
         "../envs/nanosim.yaml"
     params:
-        med_len=config["med_long_read_len"],
-	nreads=config["long_nreads"]
+        long_nreads=config["long_nreads"]
     shell:
         "simulator.py genome -rg {input.r} -c results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2"
-        " -b guppy --num_threads {threads} --fastq -o results/nanosim/bac/{wildcards.bac_ref} -dna_type circular -n {params.nreads} 2> {log}"
+        " -b guppy --num_threads {threads} --fastq -o results/nanosim/bac/{wildcards.bac_ref} -dna_type circular -n {params.long_nreads} 2> {log}"
         #add -med for median length
 
 # fractionation and concatenation

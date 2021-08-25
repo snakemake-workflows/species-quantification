@@ -192,7 +192,7 @@ rule kraken2_build_bench:
 	shell:
 		"kraken2-build --download-taxonomy --skip-maps --db {output.db} && " #only required to download test database
 		"kraken2-build {params.dbtype} --threads {threads} --db {output.db} && kraken2-build --build --db {output.db} --threads {threads} && "
-		"bracken-build -d {output.db} && touch {output.mock}"
+		"bracken-build -d {output.db} && touch {output.mock} && "
 		"kraken2-build --clean --db {output.db}"
 
 rule kraken2_sr:

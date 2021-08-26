@@ -102,9 +102,7 @@ rule nanosim_bac_sim:
     shell:
         "simulator.py genome -rg {input.r} -c results/nanosim_train/GCF_000008865.2_ASM886v2/GCF_000008865.2_ASM886v2"
         " -b guppy --num_threads {threads} --fastq -o results/nanosim/bac/{wildcards.bac_ref} -dna_type circular -n {params.long_nreads} 2> {log}"
-        #add -med for median length
-
-# fractionation and concatenation
+       
 rule fraction_sr:
     input:
         bac_fq1="results/art/bac/{bac_ref}_1.fq",
@@ -339,8 +337,8 @@ rule compare_results_sr:
 		bracken = expand("results/bracken/sr/sb/evol1_Sample{n}_fraction{p}.bracken", n = range(1, config["number_of_samples"] + 1), p = config["p"]),
 		fq = expand("results/mixed_sr/mixed_{p}_Sample{n}_1.fastq", n = range(1, config["number_of_samples"] + 1), p = config["p"])
 	output:
-		"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples_coord_fixed.pdf",
-		"results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples.csv"
+		report("results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples_coord_fixed.pdf", caption="../report/comparison_plot.rst"),
+		report("results/final_abundance/scatter_plot/sr/sr_final_abundance_all_samples.csv", caption="../report/comparison_plot.rst")
 	log:
 		"logs/compare/sr/plot_log.txt"
 	conda:
@@ -358,8 +356,8 @@ rule compare_results_lr:
 		bracken = expand("results/bracken/lr/sb/evol1_Sample{n}_fraction{p}.bracken", n = range(1, config["number_of_samples"] + 1), p = config["p"]),
 		fq = expand("results/mixed_lr/mixed_{p}_Sample{n}.fastq", n = range(1, config["number_of_samples"] + 1), p = config["p"])
 	output:
-		"results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples_coord_fixed.pdf",
-		"results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples.csv"
+		report("results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples.csv", caption="../report/comparison_plot.rst"),
+		report("results/final_abundance/scatter_plot/lr/lr_final_abundance_all_samples_coord_fixed.pdf", caption="../report/comparison_plot.rst")
 	log:
 		"logs/compare/lr/plot_log.txt"
 	conda:

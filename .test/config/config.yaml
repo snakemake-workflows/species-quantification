@@ -26,11 +26,11 @@ bacteria: config/bacteria.tsv
 #number of reads to be fractionated
 p: [200, 400]
 
-#Art: parameters for short read simulation (fold_coverage required for art settings)
+#Art: parameters for short read simulation
 short_read_len: 150
 n_reads_per_seq: 500 #could be configurable
 
-#Nanosim: parameters for long read simulation (around 20000 reads)
+#Nanosim: parameters for long read simulation
 long_nreads: 500
 med_long_read_len:
 min_long_read_len: 300
@@ -38,7 +38,3 @@ max_long_read_len: 1000
 
 #Sourmash
 sourmash_scale: 2000
-
-
-
-

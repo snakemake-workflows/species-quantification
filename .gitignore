@@ -10,7 +10,7 @@ workflow/resources/bac_refs/seqtk_subfasta.txt
 workflow/resources/nanosim-train/sra_data.fastq
 .test/logs
 .test/results
-<<<<<<< HEAD
-=======
+.test/report.html
 .snakemake
->>>>>>> modifications
+logs/
+results/

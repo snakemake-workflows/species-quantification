@@ -30,4 +30,4 @@ jobs:
         with:
           directory: .test
           snakefile: workflow/Snakefile
-          args: "--cores 30 --use-conda --show-failed-logs --conda-frontend mamba --conda-cleanup-pkgs cache"
+          args: "-j 10 --use-conda --show-failed-logs --conda-frontend mamba --conda-cleanup-pkgs cache"

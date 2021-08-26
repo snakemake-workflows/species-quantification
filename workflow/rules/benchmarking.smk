@@ -346,7 +346,8 @@ rule compare_results_sr:
 	conda:
 		"../envs/ggplot2.yaml"
 	params:
-		species = bacteria.bacterium_name
+		species = bacteria.bacterium_name,
+		fractions = config["p"]
 	script:
 		"../scripts/method_comparison_sr.R"
 
@@ -364,6 +365,7 @@ rule compare_results_lr:
 	conda:
 		"../envs/ggplot2.yaml"
 	params:
-		species = bacteria.bacterium_name
+		species = bacteria.bacterium_name,
+		fractions = config["p"]
 	script:
 		"../scripts/method_comparison_lr.R"

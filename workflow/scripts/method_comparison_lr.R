@@ -3,6 +3,7 @@ library(ggplot2)
 #this script creates an abundance plot for all samples and compares 3 quantification methods; sourmash, kraken2, bracken.
 
 sp <- snakemake@params[["species"]]
+fractions <- snakemake@params[["fractions"]]
 
 #find the number of reads in samples
 number_of_reads <- c()
@@ -140,6 +141,7 @@ for (k in snakemake@input[["bracken"]]){
   #have the final table for kraken2
   fin.b <- rbind(fin.b, bra.fin)
   fin.b$sample <- gsub( ".bracken", "", fin.b$sample)
+
 }  
 
 #final table
@@ -147,7 +149,8 @@ fin <- rbind(fin.s, fin.k)
 fin <- rbind(fin, fin.b)
 
 #modify sample names
-fin$sample_f <- factor(fin$sample, levels=c("fraction1000", "fraction5000", "fraction10000", "fraction15000"))
+levels <- paste("fraction", fractions, sep="")
+fin$sample_f <- factor(fin$sample, levels=levels)
 
 #scatter plot 
 p <- ggplot(fin, aes(x=r_fraction, y=o_fraction, shape=species, color=species))+

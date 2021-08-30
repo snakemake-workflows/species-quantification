@@ -16,7 +16,7 @@ sourmash_lca_link_k51: "https://osf.io/3cdp6/download"
 sourmash_lca_name_k51: "gtdb-rs202.genomic.k51.lca.json"
 
 ###For benchmarking###
-benchmarking: False
+benchmarking: True
 
 #Set the number of samples to be generated
 number_of_samples: 1

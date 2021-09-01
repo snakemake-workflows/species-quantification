@@ -4,4 +4,4 @@ channels:
    - conda-forge
 dependencies:
    - r-ggplot2=3.3.5
-   - bc
+   - bc=1.07

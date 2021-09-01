@@ -2,4 +2,4 @@ name: concatenation
 channels:
    - bioconda
 dependencies:
-   - seqtk
+   - seqtk=1.3

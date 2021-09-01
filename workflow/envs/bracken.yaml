@@ -3,4 +3,4 @@ channels:
    - bioconda
    - conda-forge
 dependencies:
-   - bracken
+   - bracken=2.6

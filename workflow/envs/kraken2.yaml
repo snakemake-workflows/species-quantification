@@ -3,6 +3,6 @@ channels:
    - bioconda
    - conda-forge
 dependencies:
-   - kraken2
-   - bracken
-   - rsync
+   - kraken2=2.1.1
+   - bracken=2.6
+   - rsync=3.2

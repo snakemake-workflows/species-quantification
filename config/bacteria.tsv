@@ -1,5 +1,5 @@
-bacteria	fasta	bacterium_name	
-GCF_000006765.1_ASM676v1	data/bac_refs/GCF_000006765.1_ASM676v1_genomic.fna	Pseudomonas aeruginosa	
+bacteria	fasta	bacterium_name
+GCF_000006765.1_ASM676v1	data/bac_refs/GCF_000006765.1_ASM676v1_genomic.fna	Pseudomonas aeruginosa
 GCF_000006945.2_ASM694v2	data/bac_refs/GCF_000006945.2_ASM694v2_genomic.fna	Salmonella enterica
 GCF_000008565.1_ASM856v1	data/bac_refs/GCF_000008565.1_ASM856v1_genomic.fna	Deinococcus radiodurans
 GCF_000010365.1_ASM1036v1	data/bac_refs/GCF_000010365.1_ASM1036v1_genomic.fna	Candidatus carsonella

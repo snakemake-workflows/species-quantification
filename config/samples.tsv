@@ -1,4 +1,4 @@
 sample_name	fq1	fq2
 mixed_1000	data/mixed_1000_Sample1.fastq	
 mixed_10000	data/mixed_10000_Sample1.fastq	
-kelly	unit3	data/Kelly.fastq	
+kelly	data/Kelly.fastq	

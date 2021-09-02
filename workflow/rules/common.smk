@@ -1,7 +1,7 @@
 import pandas as pd
 
 #read sample sheet
-samples = pd.read_csv(config["samples"], sep ="\t", ).set_index(["sample_name"], drop=False)
+samples = pd.read_csv(config["samples"], sep ="\t").set_index(["sample_name"], drop=False)
 
 #only if benchmarking is set to true
 bacteria = pd.read_csv(config["bacteria"], sep ="\t"). set_index(["bacteria"], drop=False)

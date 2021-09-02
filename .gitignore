@@ -1,8 +1,8 @@
+data
 workflow/logs
 workflow/report
 workflow/results
 workflow/.snakemake
-workflow/data
 workflow/scripts/abundance_estimation.py
 workflow/resources/bac_refs/*list
 workflow/resources/bac_refs/merge*

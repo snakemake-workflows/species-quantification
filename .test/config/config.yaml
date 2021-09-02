@@ -6,13 +6,8 @@ units: config/units.tsv
 #kraken db
 dbtype: "--download-library protozoa"
 
-#sourmash db_k21
-sourmash_lca_link_k21: "https://osf.io/gk2za/download"
-sourmash_lca_name_k21: "gtdb-rs202.genomic.k21.lca.json"
-
-#sourmash db_k51
-sourmash_lca_link_k51: "https://osf.io/297dp/download"
-sourmash_lca_name_k51: "gtdb-rs202.genomic.k51.lca.json"
+#paired end information
+paired: False
 
 ###For benchmarking###
 benchmarking: False
@@ -32,9 +27,16 @@ n_reads_per_seq: 500 #could be configurable
 
 #Nanosim: parameters for long read simulation
 long_nreads: 500
-med_long_read_len:
-min_long_read_len: 300
-max_long_read_len: 1000
 
-#Sourmash
+#Sourmash config
 sourmash_scale: 2000
+
+#sourmash db_k21
+sourmash_lca_link_k21: "https://osf.io/gk2za/download"
+sourmash_lca_name_k21: "gtdb-rs202.genomic.k21.lca.json"
+
+#sourmash db_k51
+sourmash_lca_link_k51: "https://osf.io/297dp/download"
+sourmash_lca_name_k51: "gtdb-rs202.genomic.k51.lca.json"
+
+

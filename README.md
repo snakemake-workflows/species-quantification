@@ -1,7 +1,10 @@
-Tumor microbiome calling pipeline produces short (Illumina) and long (ONT) read samples given some bacteria species and mimics a tumor microbime environment by having a mixture of bacterial reads with human reads. This snakemake workflow also quantifies abundances of bacteria found in the samples, using kraken2-bracken and sourmash. The results are then compared with each other, outputting scatter plots of each method.
+# Snakemake workflow: Tumor-microbiome-calling
 
-This workflow contains two usages:
+A Snakemake workflow for producing short (Illumina) and long (ONT) read samples given some bacteria species and mimics a tumor microbime environment by having a mixture of bacterial reads with human reads. This workflow also quantifies abundances of bacterial species found in the samples, using kraken2-bracken. The benchmarking results are compared with each other, outputting scatter plots for short and long read mixture samples.
 
-1. Benchmarking: Please modify config to specify benchmarking.
-2. Without benchmarking (only abundance quantification of given samples): Please modify config.yaml to specify benchmarking.
+As already stated above, this workflow contains two usages:
 
+1. Benchmarking
+2. Without benchmarking (only abundance quantification of given samples)
+
+The required configuration of these usages can be seen in `config/README.md`.

@@ -1,2 +1,3 @@
-sample_name	platform
-test_ont	ONT
+sample_name	fq1	fq2
+test_ont	data/reads/test_ont.fastq	
+

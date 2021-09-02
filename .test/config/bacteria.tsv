@@ -1,5 +1,5 @@
-bacteria	fasta	bacterium_name	
-GCF_000006765.1_ASM676v1	data/bac_refs/GCF_000006765.1_ASM676v1_genomic.fna	Pseudomonas aeruginosa	
+bacteria	fasta	bacterium_name
+GCF_000006765.1_ASM676v1	data/bac_refs/GCF_000006765.1_ASM676v1_genomic.fna	Pseudomonas aeruginosa
 GCF_000006945.2_ASM694v2	data/bac_refs/GCF_000006945.2_ASM694v2_genomic.fna	Salmonella enterica
 merged_GCF_000622225.1_ASM62222v1	data/bac_refs/merged_GCF_000622225.1_ASM62222v1_genomic.fna	Roseomonas mucosa
 

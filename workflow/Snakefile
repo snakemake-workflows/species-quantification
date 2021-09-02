@@ -19,8 +19,7 @@ if config["benchmarking"] == False:
         input:
             "results/kraken2-db/mock.txt",
             expand(
-                "results/bracken/{unit.sample_name}/evol1_{unit.sample_name}_{unit.unit_name}.bracken",
-                unit=units.itertuples(),
+                "results/bracken/{sample}/evol1_{sample}.bracken", sample=samples.sample_name,
             )
 
 

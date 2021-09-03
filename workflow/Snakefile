@@ -1,6 +1,7 @@
 from snakemake.utils import min_version
 
-#min_version("6.0.0")
+min_version("6.7.0")
+
 
 configfile: "config/config.yaml"
 
@@ -19,8 +20,9 @@ if config["benchmarking"] == False:
         input:
             "results/kraken2-db/mock.txt",
             expand(
-                "results/bracken/{sample}/evol1_{sample}.bracken", sample=samples.sample_name,
-            )
+                "results/bracken/{sample}/evol1_{sample}.bracken",
+                sample=samples.sample_name,
+            ),
 
 
 if config["benchmarking"] == True:

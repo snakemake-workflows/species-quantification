@@ -17,6 +17,19 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: "--lint"
+
+  Formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Formatting
+        uses: github/super-linter@v4.6.4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_SNAKEMAKE_SNAKEFMT: true
+  
   Testing:
     runs-on: ubuntu-latest
     steps:
@@ -30,4 +43,4 @@ jobs:
         with:
           directory: .test
           snakefile: workflow/Snakefile
-          args: "--cores 2 --use-conda --show-failed-logs --conda-frontend mamba --conda-cleanup-pkgs cache"
+          args: "--cores 2 --use-conda --show-failed-logs --conda-frontend mamba --conda-cleanup-pkgs cache --cache"

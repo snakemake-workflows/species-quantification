@@ -4,10 +4,10 @@ workflow/report
 workflow/results
 workflow/.snakemake
 workflow/scripts/abundance_estimation.py
-workflow/resources/bac_refs/*list
-workflow/resources/bac_refs/merge*
-workflow/resources/bac_refs/seqtk_subfasta.txt
-workflow/resources/nanosim-train/sra_data.fastq
+resources/bac_refs/*list
+resources/bac_refs/merge*
+resources/bac_refs/seqtk_subfasta.txt
+resources/nanosim-train/sra_data.fastq
 .test/logs
 .test/results
 .test/report.html

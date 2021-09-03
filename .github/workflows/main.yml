@@ -26,7 +26,7 @@ jobs:
         uses: github/super-linter@v4.6.4
         env:
           VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: master
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_SNAKEMAKE_SNAKEFMT: true
   
@@ -43,4 +43,4 @@ jobs:
         with:
           directory: .test
           snakefile: workflow/Snakefile
-          args: "--cores 2 --use-conda --show-failed-logs --conda-frontend mamba --conda-cleanup-pkgs cache --cache"
+          args: "--cores 2 --use-conda --show-failed-logs --conda-frontend mamba"
